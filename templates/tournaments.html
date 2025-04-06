@@ -1,0 +1,47 @@
+{% extends "base/page.html" %}
+
+{% block title %}Gerenciar Torneios{% endblock title %}
+
+{% block main %}
+  <h1 class="text-2xl font-semibold text-gray-800 mb-6">Selecione qual torneio deseja gerenciar</h1>
+
+  <div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <table class="min-w-full leading-normal">
+      <thead>
+        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left">Nome do Torneio</th>
+          <th class="py-3 px-6 text-center">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 text-sm">
+        {% for tournament in tournaments %}
+        <tr class="border-b border-gray-200 hover:bg-gray-100">
+          <td class="py-3 px-6 text-left whitespace-nowrap">
+            <div class="flex flex-row items-center">
+              {% if let Some(image) = (tournament.images | get_smallest_image) -%}
+              <img src="{{image.url}}" class="w-20 h-20" alt="">
+              {% endif -%}
+              <span class="font-bold text-lg ml-4">{{ tournament.name }}</span>
+            </div>
+          </td>
+          <td class="py-3 px-6 text-center flex flex-row items-center justify-center h-full">
+            <a href="/app/{{ tournament.slug }}/manage"
+               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+              Gerenciar
+            </a>
+            <a href="https://start.gg{{ tournament.url }}" target="_blank" rel="noopener noreferrer" class="bg-gray-100 hover:bg-gray-300 rounded shadow-md inline-block py-2 px-2 ml-4 text-gray-500 hover:text-gray-700 transition duration-300 ease-in-out" title="Ver no Start.gg">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+            </a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="2" class="py-4 px-6 text-center text-gray-500">Nenhum torneio encontrado para gerenciar.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock main %}

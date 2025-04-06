@@ -1,0 +1,15 @@
+query CurrentUser {
+  currentUser {
+    name,
+    slug,
+    player {
+      gamerTag,
+      prefix,
+    },
+    authorizations {
+      externalId,
+      type,
+      externalUsername,
+    }
+  }
+}

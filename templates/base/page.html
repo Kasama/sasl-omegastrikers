@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{title}}{% endblock title %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  {% block head %}{% endblock head %}
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+  <!-- Header Bar -->
+  <nav class="bg-blue-600 p-4 text-white shadow-md">
+    {% block header %}
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="text-xl font-bold"><a href="/">SASL - Gerenciador de campeonato</a></div>
+      <div>
+        {% if let Some(user) = maybe_user -%}
+        <div class="flex flex-row">
+          <span>Olá, {{ user | user_display_name }}</span>
+          <a href="/logout" class="">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 4H11V8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 20H11V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+        {% else -%}
+        <a href="/login"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out flex flex-row">
+          <img src="https://start.gg/favicon.ico" alt="start.gg favicon" class="w-5 h-5 mr-2">
+          Login
+        </a>
+        {% endif -%}
+      </div>
+    </div>
+    {% endblock header %}
+  </nav>
+
+  <main class="container mx-auto mt-8 p-4">
+    {% block main %}{% endblock main %}
+  </main>
+
+</body>
+
+</html>

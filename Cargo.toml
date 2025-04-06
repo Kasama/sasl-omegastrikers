@@ -1,0 +1,48 @@
+[package]
+name = "omega-championship"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sqlx = { version = "0.8", features = [
+  "uuid",
+  "sqlite",
+  "macros",
+  "runtime-tokio-rustls",
+  "time",
+  "chrono",
+] }
+anyhow = "1"
+askama = { version = "0.13" }
+axum = { version = "0.8", features = ["macros"] }
+axum-htmx = "0.7"
+axum-login = "0.17"
+axum-macros = "0.5"
+axum-extra = { version = "0.10", features = ["cookie", "typed-header"] }
+base64 = "0.22"
+clap = { version = "4", features = ["env", "derive"] }
+chrono = { version = "0.4", features = ["serde"] }
+env_logger = "0.11"
+dotenvy = "0.15"
+graphql_client = "0.14"
+rand = "0.9"
+reqwest = { version = "0.12", features = ["json", "cookies"] }
+time = "0.3"
+tokio = { version = "1", features = ["full"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = [
+  "trace",
+  "sensitive-headers",
+  "normalize-path",
+] }
+tower-sessions = "0.14"
+tracing = { version = "0.1", features = ["log"] }
+tracing-bunyan-formatter = "0.3"
+tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
+uuid = { version = "1", features = ["v4", "fast-rng", "macro-diagnostics"] }
+url = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serenity = "0.12"
