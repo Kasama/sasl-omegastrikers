@@ -2,7 +2,7 @@ pub mod group;
 pub mod team;
 pub mod user;
 
-use sqlx::{migrate, PgPool};
+use sqlx::PgPool;
 
 #[derive(Debug)]
 pub struct DB {
@@ -11,8 +11,7 @@ pub struct DB {
 
 impl DB {
     pub async fn from_pool(pool: PgPool) -> anyhow::Result<Self> {
-        let migrator = migrate!("./migrations");
-        migrator.run(&pool).await?;
+        sqlx::migrate!().run(&pool).await?;
 
         Ok(Self { pool })
     }
