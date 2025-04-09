@@ -1,0 +1,110 @@
+# fragment tournamentInfo on Tournament {
+#   name,
+#   admins {
+#     name
+#     discriminator
+#     player {
+#       gamerTag
+#     }
+#   }
+#   images {
+#     height
+#     width
+#     url
+#   }
+#   owner {
+#     discriminator
+#     player {
+#       gamerTag
+#     }
+#   }
+#   slug
+#   url
+# }
+
+query Tournament($tournament: String) {
+  tournament(slug: $tournament) {
+    name,
+    admins {
+      name
+      discriminator
+      player {
+        gamerTag
+      }
+    }
+    images {
+      height
+      width
+      url
+    }
+    owner {
+      discriminator
+      player {
+        gamerTag
+      }
+    }
+    slug
+    url
+  }
+}
+
+query TournamentTeams($tournament: String) {
+  tournament(slug: $tournament) {
+    teams(query: {perPage: 500}) {
+      nodes {
+        __typename
+        discriminator
+        name
+        images(type: "profile") {
+          height
+          width
+          url
+        }
+        members {
+          player {
+            prefix
+            gamerTag
+          }
+          isCaptain
+          isAlternate
+          participant {
+            requiredConnections {
+              externalId
+              type
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query UserTournaments($perPage: Int, $page: Int) {
+  currentUser {
+    tournaments(query: {perPage: $perPage, page: $page, filter: {videogameId: 45263}}) {
+      nodes {
+        name,
+        admins {
+          name
+          discriminator
+          player {
+            gamerTag
+          }
+        }
+        images {
+          height
+          width
+          url
+        }
+        owner {
+          discriminator
+          player {
+            gamerTag
+          }
+        }
+        slug
+        url
+      }
+    }
+  }
+}

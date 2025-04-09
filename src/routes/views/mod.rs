@@ -1,8 +1,6 @@
 use axum::http::{self, HeaderMap, StatusCode};
 
 pub mod filters;
-pub mod index;
-pub mod tournaments;
 
 pub struct ViewError {
     pub status_code: Option<StatusCode>,

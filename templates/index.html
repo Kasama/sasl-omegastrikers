@@ -5,10 +5,14 @@
 {% block main %}
 <div class="flex flex-col items-center justify-center">
   {% if let Some(u) = maybe_user %}
-  Hello, {{ u | user_display_name }}!
+  Olá, {{ u | user_display_name }}! Selecione uma ação abaixo
+  <a href="/app/tournaments"
+    class="mt-4 inline-flex items-center bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">Gerenciar
+    torneios</a>
   {% else %}
-  Você não está logado, entre com start.gg abaixo
-  <a href="/login" class="mt-4 inline-flex items-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
+  Você não está autenticado, entre com start.gg abaixo
+  <a href="/login"
+    class="mt-4 inline-flex items-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
     <img src="https://start.gg/favicon.ico" alt="start.gg favicon" class="w-5 h-5 mr-2">
     Login
   </a>

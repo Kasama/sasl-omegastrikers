@@ -1,3 +1,5 @@
 /target
-/database
+/database/data
 bruno
+.shuttle*
+Secrets*.toml

@@ -1,46 +1,48 @@
 {
-  "db_name": "SQLite",
-  "query": "SELECT * from users WHERE id = $1",
+  "db_name": "PostgreSQL",
+  "query": "SELECT * from users WHERE username = $1",
   "describe": {
     "columns": [
       {
-        "name": "id",
         "ordinal": 0,
-        "type_info": "Null"
+        "name": "id",
+        "type_info": "Int4"
       },
       {
-        "name": "username",
         "ordinal": 1,
+        "name": "username",
         "type_info": "Text"
       },
       {
-        "name": "discord",
         "ordinal": 2,
+        "name": "discord",
         "type_info": "Text"
       },
       {
-        "name": "omegastrikers_id",
         "ordinal": 3,
+        "name": "omegastrikers_id",
         "type_info": "Text"
       },
       {
-        "name": "startgg_id",
         "ordinal": 4,
+        "name": "startgg_id",
         "type_info": "Text"
       },
       {
-        "name": "created_at",
         "ordinal": 5,
-        "type_info": "Datetime"
+        "name": "created_at",
+        "type_info": "Timestamp"
       },
       {
-        "name": "updated_at",
         "ordinal": 6,
-        "type_info": "Datetime"
+        "name": "updated_at",
+        "type_info": "Timestamp"
       }
     ],
     "parameters": {
-      "Right": 1
+      "Left": [
+        "Text"
+      ]
     },
     "nullable": [
       false,
@@ -52,5 +54,5 @@
       false
     ]
   },
-  "hash": "c0e58360037da19b6c295a0e9b3ce4230aa2ede213a9125e956e66d1ec00c3c7"
+  "hash": "d5a95a59846153893685a1a386011110a5e111bf715e8115b970432ea8d0ca1b"
 }

@@ -6154,7 +6154,7 @@
               "name": "globalTeamId",
               "type": {
                 "kind": "SCALAR",
-                "name": "ID",
+                "name": "Int",
                 "ofType": null
               }
             },
@@ -13566,7 +13566,7 @@
               "name": "id",
               "type": {
                 "kind": "SCALAR",
-                "name": "ID",
+                "name": "Int",
                 "ofType": null
               }
             },

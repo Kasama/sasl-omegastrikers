@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO users (username, discord, omegastrikers_id, startgg_id, created_at, updated_at)\n               VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)\n               ON CONFLICT (username) DO\n                   UPDATE SET discord = $2, omegastrikers_id = $3, startgg_id = $4, updated_at = CURRENT_TIMESTAMP\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "4c8b12723e144c1ea94a76e5f7d561ff1d3aec5b02e448321e790834d1f443d1"
+}

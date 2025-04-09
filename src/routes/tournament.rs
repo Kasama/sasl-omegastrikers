@@ -6,10 +6,21 @@ use axum::response::{Html, IntoResponse};
 
 use crate::startgg::auth::AuthSession;
 use crate::startgg::StartGGClient;
-use crate::views::tournaments::TournamentsTemplate;
 
 use super::auth::AppError;
 use super::AppState;
+
+use crate::startgg::oauth::StartggUser;
+use crate::startgg::tournaments::{StartGGTeam, StartGGTournament};
+
+use super::views::filters;
+
+#[derive(Template)]
+#[template(path = "tournaments.html")]
+pub struct TournamentsTemplate {
+    pub maybe_user: Option<StartggUser>,
+    pub tournaments: Vec<StartGGTournament>,
+}
 
 #[axum::debug_handler]
 pub async fn tournaments_handler(
@@ -36,15 +47,42 @@ pub async fn tournaments_handler(
     ))
 }
 
+#[derive(Template)]
+#[template(path = "match_setup.html")]
+pub struct MatchSetup {
+    pub maybe_user: Option<StartggUser>,
+    pub tournament: StartGGTournament,
+    pub teams: Vec<StartGGTeam>,
+}
+
 #[axum::debug_handler]
 pub async fn manage_handler(
-    State(_state): State<Arc<AppState>>,
+    State(state): State<Arc<AppState>>,
     Path(tournament_slug): Path<String>,
-    _auth_session: AuthSession,
+    auth_session: AuthSession,
 ) -> Result<impl IntoResponse, AppError> {
-    // let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
+    let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
+    let user = startgg_client
+        .fetch_startgg_user()
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    let tournament = startgg_client
+        .fetch_tournament(tournament_slug.to_string())
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    let teams = startgg_client
+        .fetch_tournament_teams(tournament_slug)
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
 
     Ok(Html(
-        format!("Chaning tournament: {tournament_slug}")
+        MatchSetup {
+            maybe_user: Some(user),
+            tournament,
+            teams,
+        }
+        .render()?,
     ))
 }

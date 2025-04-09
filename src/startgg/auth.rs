@@ -1,12 +1,11 @@
 use std::sync::Arc;
 
 use crate::{
-    routes::AppState,
+    routes::{views::ViewError, AppState},
     startgg::{
         oauth::{self, TokenResponse},
         StartGGClient,
     },
-    views::ViewError,
 };
 use anyhow::Context;
 use axum::{

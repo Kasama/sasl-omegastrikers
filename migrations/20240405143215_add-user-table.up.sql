@@ -1,5 +1,5 @@
 CREATE TABLE "users" (
-  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "id" SERIAL PRIMARY KEY,
   "username" text NOT NULL,
   "discord" text NOT NULL,
   "omegastrikers_id" text,

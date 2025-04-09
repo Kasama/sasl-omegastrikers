@@ -1,9 +1,8 @@
 use std::{error::Error, sync::Arc};
 
-use askama::Template;
 use axum::{
     extract::{Query, State},
-    response::{Html, IntoResponse, Redirect},
+    response::{IntoResponse, Redirect},
 };
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 use base64::Engine;
@@ -12,13 +11,8 @@ use rand::{rngs::OsRng, TryRngCore};
 use reqwest::StatusCode;
 use url::Url;
 
-use crate::{
-    startgg::{
-        auth::AuthSession,
-        oauth::{self, OAuthCallbackParams, OAuthConfig, TokenResponse, REQUIRED_SCOPES},
-        StartGGClient,
-    },
-    views::index::IndexTemplate,
+use crate::startgg::oauth::{
+    self, OAuthCallbackParams, OAuthConfig, TokenResponse, REQUIRED_SCOPES,
 };
 
 pub struct AppError(pub String);
@@ -36,24 +30,6 @@ impl IntoResponse for AppError {
 }
 
 use super::AppState;
-
-#[axum::debug_handler]
-pub async fn index_handler(
-    State(state): State<Arc<AppState>>,
-    auth_session: Option<AuthSession>, // Use optional extractor
-) -> Result<impl IntoResponse, AppError> {
-    // If AuthSession exists, try to get user data for display
-    let user = if let Some(session) = auth_session {
-        StartGGClient::new(&state.http_client, &session.access_token)
-            .fetch_startgg_user()
-            .await
-            .ok()
-    } else {
-        None
-    };
-
-    Ok(Html(IndexTemplate { maybe_user: user }.render()?))
-}
 
 #[axum::debug_handler]
 pub async fn login_handler(

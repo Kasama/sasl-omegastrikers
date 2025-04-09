@@ -28,7 +28,7 @@ impl DB {
     pub async fn upsert_user(
         &self,
         user: &User,
-    ) -> Result<sqlx::sqlite::SqliteQueryResult, sqlx::Error> {
+    ) -> Result<sqlx::postgres::PgQueryResult, sqlx::Error> {
         let query = sqlx::query!(
             r#"INSERT INTO users (username, discord, omegastrikers_id, startgg_id, created_at, updated_at)
                VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
