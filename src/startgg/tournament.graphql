@@ -53,24 +53,51 @@ query TournamentTeams($tournament: String) {
     teams(query: {perPage: 500}) {
       nodes {
         __typename
-        discriminator
-        name
-        images(type: "profile") {
-          height
-          width
-          url
-        }
-        members {
-          player {
-            prefix
-            gamerTag
+        ... on GlobalTeam {
+          discriminator
+          name
+          images(type: "profile") {
+            height
+            width
+            url
           }
-          isCaptain
-          isAlternate
-          participant {
-            requiredConnections {
-              externalId
-              type
+          members {
+            player {
+              prefix
+              gamerTag
+            }
+            isCaptain
+            isAlternate
+            participant {
+              requiredConnections {
+                externalId
+                type
+              }
+            }
+          }
+        }
+        ... on EventTeam {
+          globalTeam {
+            discriminator
+            name
+            images(type: "profile") {
+              height
+              width
+              url
+            }
+            members {
+              player {
+                prefix
+                gamerTag
+              }
+              isCaptain
+              isAlternate
+              participant {
+                requiredConnections {
+                  externalId
+                  type
+                }
+              }
             }
           }
         }
@@ -108,3 +135,5 @@ query UserTournaments($perPage: Int, $page: Int) {
     }
   }
 }
+
+

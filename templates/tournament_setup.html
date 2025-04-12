@@ -1,0 +1,167 @@
+{% extends "base/page.html" %}
+
+{% block title %}Gerenciar: {{tournament.name}}{% endblock title %}
+
+{% block main %}
+  <a href="/app/tournament" class="text-blue-500 hover:text-blue-800 transition duration-300 ease-in-out">&lt; Voltar aos campeonatos</a>
+  <h1 class="text-2xl font-semibold text-gray-800 mb-6">{{tournament.name}}</h1>
+
+  <div class="w-full">
+    <div class="flex flex-row">
+      <div id="overlays" class="flex flex-col m-5 p-5 bg-white shadow-md rounded-lg overflow-hidden">
+        {% block overlaylist %}
+        <div id="overlay_list" class="flex flex-col" hx-swap-oob="true">
+          <div class="mb-4">
+            <button
+              hx-put="/app/tournament/{{tournament.slug}}/overlay"
+              hx-select="#overlay_list"
+              hx-select-oob="#overlay_list"
+              hx-indicator=".spinner"
+              class="flex flex-row w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+            > + Adicionar Overlay
+              <div class="h-full spinner mx-4 my-1">
+                <style>
+                  .spinner {
+                    display: none;
+                  }
+                  .spinner.htmx-request {
+                    display: block;
+                  }
+                  .spinner.htmx-request {
+                    display: inline-block;
+                    position: relative;
+                  }
+                  .spinner.htmx-request::after {
+                    content: '';
+                    display: block;
+                    width: 1em;
+                    height: 1em;
+                    border-radius: 50%;
+                    border: 2px solid transparent;
+                    border-top-color: #fff;
+                    animation: spin 0.6s linear infinite;
+                  }
+                  @keyframes spin {
+                    to {
+                      transform: rotate(360deg);
+                    }
+                  }
+                </style>
+              </div>
+            </button>
+          </div>
+          {% for overlay in overlays %}
+          <div class="flex flex-row items-center my-1">
+            <div
+               id="copied-popup"
+               class="opacity-0 transition duration-300 ease-in-out"
+               style="position: absolute; background: black; color: white; padding: 5px; border-radius: 5px; top: 20px; left: 50%; transform: translateX(-50%);"
+              >
+              <style>
+              #copied-popup.show {
+                opacity: 1;
+              }
+              </style>
+              link do overlay copiado!
+            </div>
+            <button
+               hx-delete="/app/tournament/{{tournament.slug}}/overlay/{{overlay.id}}"
+               hx-select="#overlay_list"
+               hx-select-oob="#overlay_list"
+               hx-indicator=".spinner"
+               hx-confirm="Tem certeza que deseja deletar esse overlay?"
+               class="flex-end mr-3 text-red-300 hover:text-red-800 font-bold transition duration-300 ease-in-out"
+            >&times;</button>
+            <span
+              hx-get="/app/tournament/{{tournament.slug}}?overlay={{overlay.id}}"
+              hx-push-url="/app/tournament/{{tournament.slug}}?overlay={{overlay.id}}"
+              hx-target="#manage-overlay"
+              class="w-full {% if let Some(o) = selected_overlay %}{% if o.id == overlay.id %}text-gray-500{% endif %}{% endif %} hover:text-gray-800 transition duration-300 ease-in-out cursor-pointer flex flex-row"
+            >
+              <style>
+                .htmx-request::after {
+                  content: '';
+                  display: block;
+                  width: 1em;
+                  height: 1em;
+                  margin-left: 2px;
+                  border-radius: 50%;
+                  border: 2px solid transparent;
+                  border-top-color: #000;
+                  animation: spin 0.6s linear infinite;
+                }
+                @keyframes spin {
+                  to {
+                    transform: rotate(360deg);
+                  }
+                }
+              </style>
+              {% if let Some(name) = overlay.name %}{{ name }}{% else %} {{ overlay.id }} {% endif %}
+            </span>
+            <button
+              _="
+              on click
+              writeText(window.location.origin + '/stream_overlay/{{overlay.id}}/ingame') on navigator.clipboard
+              then add .show to #copied-popup
+              then remove .hover:text-blue-900 from me
+              then add .text-blue-500 to me
+              wait 0.3s
+              then remove .text-blue-500 from me
+              then add .hover:text-blue-900 to me
+              wait 0.7s
+              then remove .show from #copied-popup
+              "
+              class="mx-5 hover:text-blue-900 transition duration-300 ease-in-out"
+              title="copiar link do overlay"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+        {% endblock overlaylist %}
+      </div>
+      <div id="manage-overlay" class="flex flex-col m-5 p-5 min-w-20 flex-grow bg-white shadow-md rounded-lg overflow-hidden">
+        {% block manageoverlay %}
+        {% if let Some(overlay) = selected_overlay %}
+        <span>Gerenciando Overlay {% if let Some(name) = overlay.name %}{{ name }}{% else %} {{ overlay.id }} {% endif %}</span>
+        <form
+          class="flex flex-row"
+          hx-patch="/app/tournament/{{tournament.slug}}/overlay/{{overlay.id}}"
+          hx-target="#manage-overlay"
+          hx-indicator="#rename-button"
+        >
+          <input type="text" value="{% if let Some(name) = overlay.name %}{{ name }}{% else %} {{ overlay.id }} {% endif %}" name="name" class="min-w-96 p-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+          <button id="rename-button" type="submit" class="flex flex-row bg-green-500 hover:bg-green-700 text-white text-bold rounded mx-2 py-2 px-4">
+            <style>
+              .htmx-request::after {
+                content: '';
+                display: block;
+                width: 1em;
+                height: 1em;
+                margin-left: 2px;
+                border-radius: 50%;
+                border: 2px solid transparent;
+                border-top-color: #000;
+                animation: spin 0.6s linear infinite;
+              }
+              @keyframes spin {
+                to {
+                  transform: rotate(360deg);
+                }
+              }
+            </style>
+            Renomear
+          </button>
+        </form>
+        <div hx-get="/app/tournament/{{tournament.slug}}/overlay/{{ overlay.id }}/teams" hx-trigger="load"></div>
+        {% else %}
+        <span>Selecione um overlay ao lado para gerenciar</span>
+        {% endif %}
+        {% endblock manageoverlay %}
+      </div>
+    </div>
+  </div>
+{% endblock main %}

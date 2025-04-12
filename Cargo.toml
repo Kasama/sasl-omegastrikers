@@ -25,13 +25,15 @@ axum-extra = { version = "0.10", features = ["cookie", "typed-header"] }
 base64 = "0.22"
 clap = { version = "4", features = ["env", "derive"] }
 chrono = { version = "0.4", features = ["serde"] }
-env_logger = "0.11"
 dotenvy = "0.15"
+env_logger = "0.11"
+futures-util = "0.3"
 graphql_client = "0.14"
 rand = "0.9"
 reqwest = { version = "0.12", features = ["json", "cookies"] }
 time = "0.3"
 tokio = { version = "1", features = ["full"] }
+tokio-stream = { version = "0.1", features = ["sync"] }
 tower = "0.5"
 tower-http = { version = "0.6", features = [
   "trace",
@@ -42,7 +44,12 @@ tower-sessions = "0.14"
 tracing = { version = "0.1", features = ["log"] }
 tracing-bunyan-formatter = "0.3"
 tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
-uuid = { version = "1", features = ["v4", "fast-rng", "macro-diagnostics"] }
+uuid = { version = "1", features = [
+  "v4",
+  "fast-rng",
+  "macro-diagnostics",
+  "serde",
+] }
 url = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

@@ -46,10 +46,10 @@ struct App {
 async fn shuttle_main(
     #[shuttle_shared_db::Postgres(
         local_uri = "postgres://postgres:postgres@localhost:5432/omegastrikers-sasl"
-    )] db_pool: PgPool,
+    )]
+    db_pool: PgPool,
     #[shuttle_runtime::Secrets] secrets: shuttle_runtime::SecretStore,
 ) -> shuttle_axum::ShuttleAxum {
-
     let discord_bot_token = secrets
         .get("discord_bot_token")
         .expect("Failed to load discord_bot_token");
@@ -141,14 +141,17 @@ async fn common_main(
 
     // let _handler = tokio::spawn(async move { discord_bot.start().await });
 
-    let router = init_router(routes::AppState {
-        http_client: reqwest::Client::new(),
-        oauth_config: OAuthConfig {
-            startgg_client_id: startgg_oauth_client_id.to_string(),
-            startgg_client_secret: startgg_oauth_client_secret.to_string(),
-            startgg_redirect_uri: startgg_redirect_uri.to_string(),
-        },
-    });
+    let router = init_router(
+        routes::AppState::builder(
+            OAuthConfig {
+                startgg_client_id: startgg_oauth_client_id.to_string(),
+                startgg_client_secret: startgg_oauth_client_secret.to_string(),
+                startgg_redirect_uri: startgg_redirect_uri.to_string(),
+            },
+            db,
+        )
+        .build(),
+    );
 
     Ok(router)
 }

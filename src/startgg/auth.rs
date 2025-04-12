@@ -33,7 +33,7 @@ pub async fn auth_middleware(
     mut req: Request<axum::body::Body>,
     next: Next,
 ) -> Result<Response, ViewError> {
-    tracing::debug!("Running auth middleware");
+    tracing::trace!("Running auth middleware");
 
     // Use the AuthSession extractor logic directly or re-implement parts here
     let cookies = CookieJar::from_headers(req.headers());
@@ -68,12 +68,12 @@ pub async fn auth_middleware(
         let now = Utc::now();
         // Add a small buffer (e.g., 60 seconds) to refresh slightly before expiry
         if now >= expiry - Duration::seconds(60) {
-            tracing::info!("Access token expired or nearing expiry, attempting refresh.");
+            tracing::trace!("Access token expired or nearing expiry, attempting refresh.");
             // Token expired, attempt refresh if refresh token exists
             if let Some(rt) = refresh_token {
                 match refresh_access_token(&state.http_client, &state.oauth_config, &rt).await {
                     Ok((refreshed_token_resp, new_jar)) => {
-                        tracing::info!("Successfully refreshed access token.");
+                        tracing::trace!("Successfully refreshed access token.");
                         // Update auth_data with new token details
                         let new_expiry =
                             Utc::now() + Duration::seconds(refreshed_token_resp.expires_in);
@@ -106,7 +106,7 @@ pub async fn auth_middleware(
             }
         } else {
             // Token is valid, proceed
-            tracing::debug!("Access token is valid.");
+            tracing::trace!("Access token is valid.");
         }
     }
 
@@ -163,7 +163,7 @@ pub async fn auth_middleware(
         }
     } else {
         // No valid authentication data found after checks
-        tracing::debug!("No valid auth session found.");
+        tracing::trace!("No valid auth session found.");
         let mut res = next.run(req).await;
         if let Some(jar) = new_cookies {
             // Only add cookies if refresh attempt resulted in changes (like clearing)

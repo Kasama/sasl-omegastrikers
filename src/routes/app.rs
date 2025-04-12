@@ -13,5 +13,5 @@ pub async fn index_handler(
     _s: State<Arc<AppState>>,
     _auth_session: AuthSession,
 ) -> Result<impl IntoResponse, AppError> {
-    Ok(Redirect::temporary("/app/tournaments"))
+    Ok(Redirect::temporary("/app/tournament"))
 }

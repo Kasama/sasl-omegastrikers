@@ -2033,6 +2033,7 @@ dependencies = [
  "clap",
  "dotenvy",
  "env_logger",
+ "futures-util",
  "graphql_client",
  "rand 0.9.0",
  "reqwest 0.12.15",
@@ -2045,6 +2046,7 @@ dependencies = [
  "sqlx",
  "time",
  "tokio",
+ "tokio-stream",
  "tower",
  "tower-http",
  "tower-sessions",
@@ -3772,6 +3774,7 @@ dependencies = [
  "futures-core",
  "pin-project-lite",
  "tokio",
+ "tokio-util",
 ]
 
 [[package]]
@@ -4232,6 +4235,7 @@ checksum = "b913a3b5fe84142e269d63cc62b64319ccaf89b748fc31fe025177f767a756c4"
 dependencies = [
  "getrandom 0.2.12",
  "rand 0.8.5",
+ "serde",
  "uuid-macro-internal",
 ]
 

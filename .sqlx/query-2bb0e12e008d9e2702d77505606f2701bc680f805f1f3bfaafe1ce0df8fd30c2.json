@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO team (tournament_slug, id, name, image) VALUES ($1, $2, $3, $4)\n            ON CONFLICT (id) DO UPDATE SET name = $3, image = $4",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2bb0e12e008d9e2702d77505606f2701bc680f805f1f3bfaafe1ce0df8fd30c2"
+}

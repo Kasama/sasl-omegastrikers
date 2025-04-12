@@ -1,0 +1,58 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * from stream_overlay WHERE tournament_slug = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "tournament_slug",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "team_a",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "team_b",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "score_a",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "score_b",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "hash": "ea54f1358cf88548172af555c3308ecc22921963a1f902c53ffd6089e86eb748"
+}

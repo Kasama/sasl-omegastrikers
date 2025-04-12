@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE stream_overlay SET team_a = $1, team_b = $2, score_a = $3, score_b = $4 WHERE id = $5",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7368db92348288e8c57dc8f9cbd10eabd67f13131e44bfde0bc2b735e149db21"
+}

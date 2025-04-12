@@ -1,9 +1,16 @@
 use std::sync::Arc;
 
 use askama::Template;
-use axum::extract::{Path, State};
-use axum::response::{Html, IntoResponse};
+use axum::extract::{Path, Query, Request, State};
+use axum::middleware::Next;
+use axum::response::{Html, IntoResponse, Response};
+use axum::Form;
+use axum_htmx::HxRequest;
+use futures_util::future::join_all;
+use serde::Deserialize;
+use uuid::Uuid;
 
+use crate::database::overlay::Overlay;
 use crate::startgg::auth::AuthSession;
 use crate::startgg::StartGGClient;
 
@@ -48,17 +55,31 @@ pub async fn tournaments_handler(
 }
 
 #[derive(Template)]
-#[template(path = "match_setup.html")]
-pub struct MatchSetup {
+#[template(path = "tournament_setup.html")]
+pub struct TournamentSetup {
     pub maybe_user: Option<StartggUser>,
     pub tournament: StartGGTournament,
-    pub teams: Vec<StartGGTeam>,
+    pub overlays: Vec<Overlay>,
+    pub selected_overlay: Option<Overlay>,
 }
 
+#[derive(Template)]
+#[template(path = "tournament_setup.html", block = "manageoverlay")]
+pub struct TournamentSetupManageOverlay {
+    pub selected_overlay: Option<Overlay>,
+    pub tournament: StartGGTournament,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct TournamentSetupQuery {
+    pub overlay: Option<Uuid>,
+}
 #[axum::debug_handler]
-pub async fn manage_handler(
+pub async fn tournament_setup(
     State(state): State<Arc<AppState>>,
     Path(tournament_slug): Path<String>,
+    Query(query): Query<TournamentSetupQuery>,
+    HxRequest(is_hx_request): HxRequest,
     auth_session: AuthSession,
 ) -> Result<impl IntoResponse, AppError> {
     let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
@@ -66,23 +87,233 @@ pub async fn manage_handler(
         .fetch_startgg_user()
         .await
         .map_err(|e| AppError(e.to_string()))?;
-
     let tournament = startgg_client
         .fetch_tournament(tournament_slug.to_string())
         .await
         .map_err(|e| AppError(e.to_string()))?;
 
-    let teams = startgg_client
-        .fetch_tournament_teams(tournament_slug)
+    let overlays = state.db.get_tournament_overlays(&tournament.slug).await?;
+
+    let selected_overlay = match query.overlay {
+        Some(id) => Some(state.db.get_overlay(id).await?),
+        None => None,
+    };
+
+    Ok(Html(if is_hx_request {
+        format!(
+            "{}\n{}",
+            TournamentSetupManageOverlay {
+                tournament: tournament.clone(),
+                selected_overlay: selected_overlay.clone()
+            }
+            .render()?,
+            TournamentStreamOverlayList {
+                tournament,
+                overlays,
+                selected_overlay
+            }
+            .render()?
+        )
+    } else {
+        TournamentSetup {
+            maybe_user: Some(user),
+            tournament,
+            overlays,
+            selected_overlay,
+        }
+        .render()?
+    }))
+}
+
+#[derive(Template)]
+#[template(path = "tournament_setup.html", block = "overlaylist")]
+pub struct TournamentStreamOverlayList {
+    tournament: StartGGTournament,
+    overlays: Vec<Overlay>,
+    selected_overlay: Option<Overlay>,
+}
+
+#[axum::debug_handler]
+pub async fn create_overlay(
+    State(state): State<Arc<AppState>>,
+    Path(tournament_slug): Path<String>,
+    Query(query): Query<TournamentSetupQuery>,
+    auth_session: AuthSession,
+) -> Result<impl IntoResponse, AppError> {
+    tracing::info!("Handling create_overlay");
+
+    let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
+    let tournament = startgg_client
+        .fetch_tournament(tournament_slug.to_string())
         .await
         .map_err(|e| AppError(e.to_string()))?;
 
+    let _ = state
+        .db
+        .create_overlay(&tournament.slug)
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    let overlays = state.db.get_tournament_overlays(&tournament.slug).await?;
+
+    let selected_overlay = match query.overlay {
+        Some(id) => Some(state.db.get_overlay(id).await?),
+        None => None,
+    };
+
     Ok(Html(
-        MatchSetup {
-            maybe_user: Some(user),
+        TournamentStreamOverlayList {
             tournament,
-            teams,
+            overlays,
+            selected_overlay,
         }
         .render()?,
     ))
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateOverlayForm {
+    pub name: String,
+}
+
+#[axum::debug_handler]
+pub async fn update_overlay(
+    State(state): State<Arc<AppState>>,
+    Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
+    auth_session: AuthSession,
+    Form(data): Form<UpdateOverlayForm>,
+) -> Result<impl IntoResponse, AppError> {
+    let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
+    let tournament = startgg_client
+        .fetch_tournament(tournament_slug.to_string())
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    state
+        .db
+        .update_overlay(overlay_id, &data.name)
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    let overlays = state.db.get_tournament_overlays(&tournament.slug).await?;
+
+    let selected_overlay = state.db.get_overlay(overlay_id).await?;
+
+    Ok(format!(
+        "{}\n{}",
+        TournamentSetupManageOverlay {
+            tournament: tournament.clone(),
+            selected_overlay: Some(selected_overlay.clone()),
+        }
+        .render()?,
+        TournamentStreamOverlayList {
+            tournament,
+            overlays,
+            selected_overlay: Some(selected_overlay)
+        }
+        .render()?
+    ))
+}
+
+#[axum::debug_handler]
+pub async fn delete_overlay(
+    State(state): State<Arc<AppState>>,
+    Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
+    auth_session: AuthSession,
+) -> Result<impl IntoResponse, AppError> {
+    let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
+    let tournament = startgg_client
+        .fetch_tournament(tournament_slug.to_string())
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    state
+        .db
+        .delete_overlay(overlay_id)
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    let overlays = state.db.get_tournament_overlays(&tournament.slug).await?;
+
+    Ok(Html(
+        TournamentStreamOverlayList {
+            tournament,
+            overlays,
+            selected_overlay: None,
+        }
+        .render()?,
+    ))
+}
+
+#[derive(Template)]
+#[template(path = "match_setup.html")]
+pub struct MatchSetup {
+    pub tournament_slug: String,
+    pub overlay: Overlay,
+    pub teams: Vec<StartGGTeam>,
+}
+
+#[axum::debug_handler]
+pub async fn manage_handler(
+    State(state): State<Arc<AppState>>,
+    Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
+    auth_session: AuthSession,
+) -> Result<impl IntoResponse, AppError> {
+    let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
+    let teams = startgg_client
+        .fetch_tournament_teams(tournament_slug.clone())
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    let overlay = state
+        .db
+        .get_overlay(overlay_id)
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    let _ = join_all(
+        teams
+            .iter()
+            .map(|team| state.db.upsert_team(tournament_slug.clone(), team)),
+    )
+    .await;
+
+    Ok(Html(
+        MatchSetup {
+            teams,
+            overlay,
+            tournament_slug,
+        }
+        .render()?,
+    ))
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct TournamentSlugPathExtractor {
+    tournament_slug: String,
+}
+
+pub async fn tournament_access_middleware(
+    State(state): State<Arc<AppState>>,
+    Path(path_extractor): Path<TournamentSlugPathExtractor>,
+    auth_session: AuthSession,
+    req: Request<axum::body::Body>,
+    next: Next,
+) -> Result<Response, AppError> {
+    let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
+
+    let user_tournaments = startgg_client
+        .fetch_tournaments_organized_by_user()
+        .await
+        .map_err(|e| AppError(e.to_string()))?
+        .into_iter()
+        .find(|t| t.slug == path_extractor.tournament_slug);
+
+    user_tournaments.ok_or(AppError(format!(
+        "user is not authorized to manage tournament {}",
+        path_extractor.tournament_slug
+    )))?;
+
+    let res = next.run(req).await;
+    Ok(res)
 }

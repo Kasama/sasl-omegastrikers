@@ -1,6 +1,7 @@
 pub mod group;
 pub mod team;
 pub mod user;
+pub mod overlay;
 
 use sqlx::PgPool;
 

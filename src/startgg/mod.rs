@@ -52,7 +52,7 @@ impl<'a> StartGGClient<'a> {
 
         // let response_body: graphql_client::Response<ResponseData> = response.json().await?;
         let resp_text = response.text().await?;
-        tracing::debug!("Query response: '{resp_text}'");
+        tracing::trace!("Query response: '{resp_text}'");
         let response_body: graphql_client::Response<ResponseData> =
             serde_json::from_str(&resp_text)?;
 

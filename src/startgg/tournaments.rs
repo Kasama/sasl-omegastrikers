@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use serde::{Deserialize, Serialize};
 
 use super::StartGGClient;
@@ -55,6 +57,7 @@ pub struct StartGGTeamMember {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StartGGTeam {
     pub name: String,
+    pub nickname: Option<String>,
     pub image: Option<StartGGImage>,
     pub id: String,
     pub team_members: Vec<StartGGTeamMember>,
@@ -107,7 +110,7 @@ impl StartGGClient<'_> {
                                 })
                             })
                             .collect(),
-                        slug: t.slug?,
+                        slug: t.slug?.trim_start_matches("tournament/").to_string(),
                         url: t.url?,
                     })
                 })
@@ -136,15 +139,7 @@ impl StartGGClient<'_> {
         }
 
         let tournament: Option<StartGGTournament> = (|| {
-            tracing::debug!("tournament debug: resp_body {response_body:?}");
-            let opt_data = response_body.data;
-            tracing::debug!("tournament debug: opt_data {opt_data:?}");
-            let data = opt_data?;
-            tracing::debug!("tournament debug: data {data:?}");
-            let tournament_info = data.tournament;
-            tracing::debug!("tournament debug: info {tournament_info:?}");
-            let t = tournament_info?;
-            tracing::debug!("tournament debug: t {t:?}");
+            let t = response_body.data?.tournament?;
             Some(StartGGTournament {
                 name: t.name?,
                 images: t
@@ -160,7 +155,7 @@ impl StartGGClient<'_> {
                         })
                     })
                     .collect(),
-                slug: t.slug?,
+                slug: t.slug?.trim_start_matches("tournament/").to_string(),
                 url: t.url?,
             })
         })();
@@ -197,9 +192,15 @@ impl StartGGClient<'_> {
                 .nodes?
                 .into_iter()
                 .filter_map(|team| {
-                    let t = team?;
+                    let t = match team? {
+                        tournament_teams::TournamentTeamsTournamentTeamsNodes::EventTeam(
+                            tournament_teams_tournament_teams_nodes_on_event_team,
+                        ) => tournament_teams_tournament_teams_nodes_on_event_team.global_team,
+                        _ => None,
+                    }?;
                     Some(StartGGTeam {
                         name: t.name?,
+                        nickname: None,
                         image: t.images.unwrap_or_default().into_iter().find_map(|image| {
                             let img = image?;
                             Some(StartGGImage {
@@ -242,7 +243,11 @@ impl StartGGClient<'_> {
                 .collect();
             Some(teams)
         })();
+        let mut ts = teams.ok_or(anyhow::anyhow!("failed to get tournament team info"))?;
 
-        teams.ok_or(anyhow::anyhow!("failed to get tournament team info"))
+        let mut seen_ids = HashSet::new();
+        ts.retain(|team| seen_ids.insert(team.id.clone()));
+
+        Ok(ts)
     }
 }
