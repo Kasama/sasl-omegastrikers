@@ -3,3 +3,5 @@
 bruno
 .shuttle*
 Secrets*.toml
+.env
+omega-log-watcher

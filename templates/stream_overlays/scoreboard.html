@@ -1,0 +1,136 @@
+<style>
+  body {
+    margin: 0;
+    background-color: #1a1a1a;
+    display: flex;
+    align-items: flex-end;
+    /* height: 100vh; */
+  }
+
+  .overlay {
+    display: flex;
+    align-items: center;
+    /* gap: 10px; */
+    /* margin-bottom: 40px; */
+  }
+
+  .team-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .team-name {
+    width: 320px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 60px;
+    background: radial-gradient(circle at center, #323232, #2b2b2b);
+    border: 1px solid #818181;
+  }
+
+  .team-standings {
+    width: 120px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 32px;
+    background: radial-gradient(circle at center, #323232, #2b2b2b);
+    border: 1px solid #818181;
+  }
+
+  .right {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    margin-left: -4px;
+  }
+
+  .left {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-right: -4px;
+  }
+
+  .team-standings.right {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 40px;
+    align-self: flex-start;
+  }
+
+  .team-standings.left {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 40px;
+    align-self: flex-end;
+  }
+
+  .score-box {
+    width: 100px;
+    height: 160px;
+    border-radius: 12px;
+    border: 1px solid #818181;
+    z-index: 10;
+  }
+
+  .score-box.blue {
+    background: radial-gradient(circle at center, #6592FD, #4d6fc0);
+    color: white;
+    font-size: 100px;
+    text-align: center;
+  }
+
+  .score-box.red {
+    background: radial-gradient(circle at center, #B93D55, #7b2838);
+    color: white;
+    font-size: 100px;
+    text-align: center;
+  }
+
+  .logo-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-right: -10px;
+    margin-left: -10px;
+    background-color: #1a1a1a;
+    border: 1px solid #818181;
+    z-index: 20;
+  }
+</style>
+
+<div class="flex flex-row">
+  <div class="team-container">
+    <div class="flex flex-col">
+      <div class="team-name left">
+        {% if let Some(img) = team_a.image %}
+        <img class="mr-2" style="height: 118px" src="{{img.url}}" alt="">
+        {% endif %}
+        {{ team_a | team_display_name }}
+      </div>
+      <div class="team-standings left">{{ team_a_standing }}</div>
+    </div>
+    <div class="score-box blue"> {{ team_a_score }}</div>
+  </div>
+
+  <img src="/assets/sasl-logo.png" alt="SASL Logo" class="logo-circle">
+
+  <div class="team-container">
+    <div class="score-box red">{{ team_b_score }}</div>
+    <div class="flex flex-col">
+      <div class="team-name right">
+        {{ team_b | team_display_name }}
+        {% if let Some(img) = team_b.image %}
+        <img class="ml-2" style="height: 118px" src="{{img.url}}" alt="">
+        {% endif %}
+      </div>
+      <div class="team-standings right">{{ team_b_standing }}</div>
+    </div>
+  </div>
+</div>

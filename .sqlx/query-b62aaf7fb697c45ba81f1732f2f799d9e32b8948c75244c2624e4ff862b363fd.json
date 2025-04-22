@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO wait_timer (overlay_id, wait_until, wait_type) VALUES ($1, $2, $3) ON CONFLICT (overlay_id) DO UPDATE SET wait_until = $2, wait_type = $3",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b62aaf7fb697c45ba81f1732f2f799d9e32b8948c75244c2624e4ff862b363fd"
+}

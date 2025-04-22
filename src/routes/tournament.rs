@@ -246,41 +246,120 @@ pub async fn delete_overlay(
 }
 
 #[derive(Template)]
-#[template(path = "match_setup.html")]
-pub struct MatchSetup {
+#[template(path = "teams_setup.html")]
+pub struct TeamsSetup {
     pub tournament_slug: String,
-    pub overlay: Overlay,
+    pub overlay_id: Uuid,
     pub teams: Vec<StartGGTeam>,
 }
 
 #[axum::debug_handler]
-pub async fn manage_handler(
+pub async fn team_setup_handler(
     State(state): State<Arc<AppState>>,
     Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
     auth_session: AuthSession,
 ) -> Result<impl IntoResponse, AppError> {
-    let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
-    let teams = startgg_client
-        .fetch_tournament_teams(tournament_slug.clone())
+    let teams = get_tournament_teams(state, &auth_session, &tournament_slug)
         .await
         .map_err(|e| AppError(e.to_string()))?;
 
+    Ok(Html(
+        TeamsSetup {
+            teams,
+            overlay_id,
+            tournament_slug,
+        }
+        .render()?,
+    ))
+}
+
+pub async fn get_tournament_teams(
+    state: Arc<AppState>,
+    auth_session: &AuthSession,
+    tournament_slug: &str,
+) -> anyhow::Result<Vec<StartGGTeam>> {
+    let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
+
+    let teams = startgg_client
+        .fetch_tournament_teams(tournament_slug.to_string())
+        .await?;
+
+    let _ = join_all(
+        teams
+            .iter()
+            .map(|team| state.db.upsert_team(tournament_slug, team)),
+    )
+    .await;
+
+    let teams = state.db.get_tournament_teams(tournament_slug).await?;
+
+    Ok(teams)
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateTeamNicknameForm {
+    team: String,
+    team_nickname: String,
+}
+#[axum::debug_handler]
+pub async fn update_team_nickname(
+    State(state): State<Arc<AppState>>,
+    auth_session: AuthSession,
+    Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
+    Form(form): Form<UpdateTeamNicknameForm>,
+) -> Result<impl IntoResponse, AppError> {
+    let team = state
+        .db
+        .get_team(&form.team)
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    let t = StartGGTeam {
+        nickname: Some(form.team_nickname),
+        ..team
+    };
+
+    state
+        .db
+        .upsert_team(&tournament_slug, &t)
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    let teams = get_tournament_teams(state, &auth_session, &tournament_slug)
+        .await
+        .map_err(|e| AppError(e.to_string()))?;
+
+    Ok(Html(
+        TeamsSetup {
+            tournament_slug,
+            overlay_id,
+            teams,
+        }
+        .render()?,
+    ))
+}
+
+#[derive(Template)]
+#[template(path = "casters_setup.html")]
+pub struct CastersSetup {
+    pub tournament_slug: String,
+    pub overlay: Overlay,
+}
+
+#[axum::debug_handler]
+pub async fn casters_handler(
+    State(state): State<Arc<AppState>>,
+    Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
+    _auth_session: AuthSession,
+) -> Result<impl IntoResponse, AppError> {
     let overlay = state
         .db
         .get_overlay(overlay_id)
         .await
         .map_err(|e| AppError(e.to_string()))?;
 
-    let _ = join_all(
-        teams
-            .iter()
-            .map(|team| state.db.upsert_team(tournament_slug.clone(), team)),
-    )
-    .await;
-
     Ok(Html(
-        MatchSetup {
-            teams,
+        CastersSetup {
             overlay,
             tournament_slug,
         }

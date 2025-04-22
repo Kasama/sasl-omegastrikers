@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO casters (overlay_id, kind, name, stream_video) VALUES ($1, $2, $3, $4)\n            ON CONFLICT (overlay_id, kind) DO UPDATE SET name = $3, stream_video = $4",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "cc1695b799f4a91036b495a79d00c38cefe00140000d847be629d2b783e54e90"
+}

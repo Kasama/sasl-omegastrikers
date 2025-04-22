@@ -1,15 +1,14 @@
-use crate::database::user::User;
 use crate::startgg::tournaments::{StartGGImage, StartGGTeam};
 
 use super::DB;
 
-#[derive(Debug)]
-pub struct Group {
-    pub extras: Vec<User>,
-    pub forwards: (User, User),
-    pub goalie: User,
-    pub coach: User,
-}
+// #[derive(Debug)]
+// pub struct Group {
+//     pub extras: Vec<User>,
+//     pub forwards: (User, User),
+//     pub goalie: User,
+//     pub coach: User,
+// }
 
 impl DB {
     pub async fn get_team(&self, team_id: &str) -> Result<StartGGTeam, anyhow::Error> {
@@ -31,9 +30,37 @@ impl DB {
             })
     }
 
+    pub async fn get_tournament_teams(
+        &self,
+        tournament_slug: &str,
+    ) -> Result<Vec<StartGGTeam>, anyhow::Error> {
+        Ok(sqlx::query!(
+            "SELECT * from team WHERE tournament_slug = $1",
+            tournament_slug
+        )
+        .fetch_all(&self.pool)
+        .await
+        .map_err(|e| anyhow::anyhow!("failed to get team: {}", e))
+        .inspect_err(|e| tracing::error!("{}", e))
+        .map(|rows| {
+            rows.into_iter().map(|row| StartGGTeam {
+                name: row.name,
+                nickname: row.nickname,
+                image: row.image.map(|img| StartGGImage {
+                    url: img,
+                    height: 0f64,
+                    width: 0f64,
+                }),
+                id: row.id,
+                team_members: vec![],
+            })
+        })?
+        .collect::<Vec<_>>())
+    }
+
     pub async fn upsert_team(
         &self,
-        tournament_slug: String,
+        tournament_slug: &str,
         team: &StartGGTeam,
     ) -> Result<(), anyhow::Error> {
         let query = if let Some(nickname) = &team.nickname {

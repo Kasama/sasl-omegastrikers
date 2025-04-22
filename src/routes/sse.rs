@@ -29,6 +29,9 @@ pub enum SSEDestination {
 pub enum SSEventType {
     Test,
     IngameOverlayUpdate,
+    CasterOverlayUpdate,
+    TodaysMatchesUpdate,
+    WaitInfoUpdate,
 }
 
 impl Display for SSEventType {

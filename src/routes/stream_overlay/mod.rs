@@ -1,6 +1,10 @@
+pub mod casters;
+pub mod waiting;
+
 use super::auth::AppError;
 use super::sse::{SSEDestination, SSEvent, SSEventType};
 use super::AppState;
+use crate::routes::views::filters;
 use crate::startgg::auth::AuthSession;
 use crate::startgg::tournaments::StartGGTeam;
 use crate::startgg::StartGGClient;
@@ -14,29 +18,10 @@ use uuid::Uuid;
 
 #[axum::debug_handler]
 pub async fn ingame_overlay(
-    s: State<Arc<AppState>>,
+    _s: State<Arc<AppState>>,
     Path(overlay_id): Path<Uuid>,
 ) -> Result<impl IntoResponse, AppError> {
-    Ok(Html(
-        IngameOverlayTemplate {
-            team_a: StartGGTeam {
-                name: "Pix".to_string(),
-                nickname: None,
-                image: None,
-                id: "test".to_string(),
-                team_members: vec![],
-            },
-            team_b: StartGGTeam {
-                name: "PBWM".to_string(),
-                nickname: None,
-                image: None,
-                id: "test".to_string(),
-                team_members: vec![],
-            },
-            overlay_id,
-        }
-        .render()?,
-    ))
+    Ok(Html(IngameOverlayTemplate { overlay_id }.render()?))
 }
 
 #[derive(Debug, Deserialize)]
@@ -47,7 +32,7 @@ pub struct UpdateTeamForm {
     // score_b: String,
 }
 #[axum::debug_handler]
-pub async fn update_team(
+pub async fn update_ingame_scoreboard(
     state: State<Arc<AppState>>,
     auth_session: AuthSession,
     Path((_tournament_slug, overlay_id)): Path<(String, Uuid)>,
@@ -86,10 +71,13 @@ pub async fn update_team(
     state.events_sender.send(SSEvent {
         destination: SSEDestination::Channel(format!("overlay_{}", overlay.id)),
         event: SSEventType::IngameOverlayUpdate,
-        data: IngameOverlayMain {
-            overlay_id,
+        data: ScoreboardTemplate {
             team_a,
             team_b,
+            team_a_score: 1,
+            team_a_standing: "1 - 0".to_string(),
+            team_b_score: 1,
+            team_b_standing: "2 - 3".to_string(),
         }
         .render()?,
     })?;
@@ -101,14 +89,15 @@ pub async fn update_team(
 #[template(path = "stream_overlays/ingame.html")]
 pub struct IngameOverlayTemplate {
     pub overlay_id: Uuid,
-    pub team_a: StartGGTeam,
-    pub team_b: StartGGTeam,
 }
 
 #[derive(Template)]
-#[template(path = "stream_overlays/ingame.html", block = "scoreboard")]
-pub struct IngameOverlayMain {
-    pub overlay_id: Uuid,
+#[template(path = "stream_overlays/scoreboard.html")]
+pub struct ScoreboardTemplate {
     pub team_a: StartGGTeam,
+    pub team_a_score: i32,
+    pub team_a_standing: String,
     pub team_b: StartGGTeam,
+    pub team_b_score: i32,
+    pub team_b_standing: String,
 }

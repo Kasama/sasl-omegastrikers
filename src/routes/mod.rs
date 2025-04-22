@@ -1,12 +1,12 @@
 use axum::http::header;
-use axum::routing::{delete, put};
+use axum::routing::{delete, post, put};
 use axum::{body::Body, http::Request, routing::get, Extension, Router};
-use axum_extra::routing::RouterExt;
 use std::sync::Arc;
 use tokio::sync::broadcast;
 use tower::ServiceBuilder;
 use tower_http::normalize_path::NormalizePathLayer;
 use tower_http::sensitive_headers::SetSensitiveHeadersLayer;
+use tower_http::services::{ServeDir, ServeFile};
 use tower_http::trace::TraceLayer;
 use uuid::Uuid;
 
@@ -73,6 +73,8 @@ pub fn init_router(state: AppState) -> Router {
     let s = Arc::new(state);
     Router::new()
         .route("/", get(index::index_handler))
+        .nest_service("/favicon.ico", ServeFile::new("assets/favicon.ico"))
+        .nest_service("/assets", ServeDir::new("assets"))
         .route("/login", get(auth::login_handler))
         .route("/oauth/startgg_callback", get(auth::oauth_callback_handler))
         .route("/logout", get(auth::logout_handler))
@@ -85,12 +87,26 @@ pub fn init_router(state: AppState) -> Router {
                 .nest("/tournament/{tournament_slug}", Router::new()
                     .route("/", get(tournament::tournament_setup))
                     .route("/overlay", put(tournament::create_overlay))
-                    .route("/overlay/{overlay_id}", delete(tournament::delete_overlay).patch(tournament::update_overlay))
-                    .route("/overlay/{overlay_id}/teams", get(tournament::manage_handler).put(stream_overlay::update_team))
+                    .nest("/overlay/{overlay_id}", Router::new()
+                        .route("/", delete(tournament::delete_overlay).patch(tournament::update_overlay))
+                        .route("/teams", get(tournament::team_setup_handler))
+                        .route("/ingame", put(stream_overlay::update_ingame_scoreboard))
+                        .route("/teams/nickname", post(tournament::update_team_nickname))
+                        .route("/casters", get(tournament::casters_handler).put(stream_overlay::casters::update_casters))
+                        .route("/waiting", get(stream_overlay::waiting::waiting_setup))
+                        .route("/waiting/matches", post(stream_overlay::waiting::todays_matches_update))
+                        .route("/waiting/timer", post(stream_overlay::waiting::timer_update))
+                    )
                     .layer(axum::middleware::from_fn_with_state(s.clone(), tournament::tournament_access_middleware))
                 )
         )
-        .route("/stream_overlay/{overlay_id}/ingame", get(stream_overlay::ingame_overlay))
+        .nest("/stream_overlay/{overlay_id}", Router::new()
+            .route("/ingame", get(stream_overlay::ingame_overlay))
+            .route("/waiting", get(stream_overlay::waiting::waiting_overlay))
+            .route("/waiting/timer", get(stream_overlay::waiting::timer_overlay))
+            .route("/waiting/todays_matches", get(stream_overlay::waiting::todays_matches_overlay))
+            .route("/casters", get(stream_overlay::casters::casters_overlay))
+        )
         .layer(axum::middleware::from_fn_with_state(s.clone(), startgg::auth::auth_middleware))
         .layer(
             ServiceBuilder::new()

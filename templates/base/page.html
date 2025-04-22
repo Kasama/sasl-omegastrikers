@@ -46,6 +46,32 @@
         </a>
         {% endif -%}
       </div>
+        <style>
+        #notification-popup.show {
+          opacity: 1;
+        }
+        </style>
+        <div
+           id="notification-popup"
+           class="opacity-0 transition duration-300 ease-in-out"
+           style="position: fixed; background: black; color: white; padding: 5px; border-radius: 5px; top: 20px; left: 50%; transform: translateX(-50%);"
+           hx-swap="innerHTML"
+           _="on htmx:afterSwap if my.innerHTML != '' then
+              add .show
+              wait 1s
+              remove .show
+              wait 300ms
+              set my.innerHTML to ''
+              end
+              on notification if my.innerHTML != '' then
+              add .show
+              wait 1s
+              remove .show
+              wait 300ms
+              set my.innerHTML to ''
+              end
+          ">
+        </div>
     </div>
     {% endblock header %}
   </nav>

@@ -1,0 +1,100 @@
+<div class="flex flex-col items-center">
+  <form class="flex flex-col items-center w-3/4 my-10"
+    hx-put="/app/tournament/{{ tournament_slug }}/overlay/{{overlay.id}}/casters" hx-target="#notification-popup">
+    <div class="flex flex-row w-full mb-2 justify-between">
+      <a class="transition duration-300 ease-in-out flex flex-row transition duration-300 ease-in-out bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded"
+        href="{{overlay.id | vdo_director_link}}" target="_blank">
+        Abrir console de configurações do VDO
+        <svg class="w-6 h-6 mx-2" viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="15" width="60" height="40" rx="4" ry="4" stroke="currentColor" stroke-width="3" fill="none" />
+          <circle cx="25" cy="35" r="10" stroke="currentColor" stroke-width="3" fill="none" />
+          <rect x="5" y="55" width="25" height="10" rx="2" ry="2" stroke="currentColor" stroke-width="3" fill="none" />
+          <path d="M65 30 L95 20 L95 50 L65 40 Z" stroke="currentColor" stroke-width="3" fill="none" />
+        </svg>
+      </a>
+      <button _="
+              on click
+              writeText(window.location.origin + '/stream_overlay/{{overlay.id}}/casters') on navigator.clipboard
+              then put 'Link copiado' into #notification-popup
+              send notification to #notification-popup
+              "
+        class="transition duration-300 ease-in-out bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex flex-row items-center"
+        hx-disable type="button" title="copiar overlay de casters para o obs">
+        <span>Copiar link do overlay de casters para o OBS</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>
+      </button>
+    </div>
+    <div class="flex flex-row mb-10 w-full">
+      <div class="flex flex-col gap-6 items-center shadow-sm flex-grow">
+        <span class="w-full text-center bg-slate-300">Narrador</span>
+        <div class="flex flex-row item-baseline">
+          <input type="text" id="narrator" placeholder="Nome do narrador" name="narrator"
+            class="min-w-96 p-2 border-gray-300 rounded-md shadow-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+        </div>
+        <span class="flex flex-row items-center mb-2 w-full">
+          {% let narrator_invite = filters::vdo_invite_link(overlay.id, "narrator")? %}
+          <button _='
+              on click
+              writeText("{{ narrator_invite }}") on navigator.clipboard
+              then put "Link copiado" into #notification-popup
+              send notification to #notification-popup
+              then remove .hover:text-blue-900 from me
+              then add .text-blue-500 to me
+              wait 0.3s
+              then remove .text-blue-500 from me
+              then add .hover:text-blue-900 to me
+              ' class="mx-3 hover:text-blue-900 transition duration-300 ease-in-out" hx-disable type="button"
+            title="copiar convite para narrador">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </button>
+          <a class="hover:text-blue-900 transition duration-300 ease-in-out flex-grow"
+            href='{{overlay.id | vdo_invite_link("narrator")}}' target="_blank">Convite para narrador</a>
+        </span>
+        <input type="hidden" name="narrator_video" value='{{ overlay.id | vdo_view_link("narrator") }}'>
+      </div>
+      <div class="flex flex-col gap-6 items-center shadow-sm flex-grow">
+        <span class="w-full text-center bg-slate-300">Comentarista</span>
+        <div class="flex flex-row item-baseline">
+          <input type="text" id="commenter" placeholder="Nome do comentarista" name="commenter"
+            class="min-w-96 p-2 border-gray-300 rounded-md shadow-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+        </div>
+        <span class="flex flex-row items-center mb-2 w-full">
+          {% let commenter_invite = filters::vdo_invite_link(overlay.id, "commenter")? %}
+          <button _='
+              on click
+              writeText("{{ commenter_invite }}") on navigator.clipboard
+              then put "Link copiado" into #notification-popup
+              send notification to #notification-popup
+              then remove .hover:text-blue-900 from me
+              then add .text-blue-500 to me
+              wait 0.3s
+              then remove .text-blue-500 from me
+              then add .hover:text-blue-900 to me
+              ' class="mx-3 hover:text-blue-900 transition duration-300 ease-in-out" hx-disable type="button"
+            title="copiar convite para comentarista">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </button>
+          <a class="hover:text-blue-900 transition duration-300 ease-in-out flex-grow"
+            href='{{overlay.id | vdo_invite_link("commenter")}}' target="_blank">Convite para comentarista</a>
+        </span>
+        <input type="hidden" name="commenter_video" value='{{ overlay.id | vdo_view_link("commenter") }}'>
+      </div>
+    </div>
+    <div class="flex flex-row justify-between w-full mt-2">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" type="submit"
+        value="Submit">Aplicar</button>
+    </div>
+  </form>
+</div>

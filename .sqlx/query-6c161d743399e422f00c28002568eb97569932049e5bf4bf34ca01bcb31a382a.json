@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * from wait_timer WHERE overlay_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "overlay_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "wait_type",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "wait_until",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "6c161d743399e422f00c28002568eb97569932049e5bf4bf34ca01bcb31a382a"
+}

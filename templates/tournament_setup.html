@@ -52,18 +52,6 @@
           </div>
           {% for overlay in overlays %}
           <div class="flex flex-row items-center my-1">
-            <div
-               id="copied-popup"
-               class="opacity-0 transition duration-300 ease-in-out"
-               style="position: absolute; background: black; color: white; padding: 5px; border-radius: 5px; top: 20px; left: 50%; transform: translateX(-50%);"
-              >
-              <style>
-              #copied-popup.show {
-                opacity: 1;
-              }
-              </style>
-              link do overlay copiado!
-            </div>
             <button
                hx-delete="/app/tournament/{{tournament.slug}}/overlay/{{overlay.id}}"
                hx-select="#overlay_list"
@@ -98,26 +86,6 @@
               </style>
               {% if let Some(name) = overlay.name %}{{ name }}{% else %} {{ overlay.id }} {% endif %}
             </span>
-            <button
-              _="
-              on click
-              writeText(window.location.origin + '/stream_overlay/{{overlay.id}}/ingame') on navigator.clipboard
-              then add .show to #copied-popup
-              then remove .hover:text-blue-900 from me
-              then add .text-blue-500 to me
-              wait 0.3s
-              then remove .text-blue-500 from me
-              then add .hover:text-blue-900 to me
-              wait 0.7s
-              then remove .show from #copied-popup
-              "
-              class="mx-5 hover:text-blue-900 transition duration-300 ease-in-out"
-              title="copiar link do overlay"
-              >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-              </svg>
-            </button>
           </div>
           {% endfor %}
         </div>
@@ -126,13 +94,13 @@
       <div id="manage-overlay" class="flex flex-col m-5 p-5 min-w-20 flex-grow bg-white shadow-md rounded-lg overflow-hidden">
         {% block manageoverlay %}
         {% if let Some(overlay) = selected_overlay %}
-        <span>Gerenciando Overlay {% if let Some(name) = overlay.name %}{{ name }}{% else %} {{ overlay.id }} {% endif %}</span>
         <form
-          class="flex flex-row"
+          class="flex flex-row items-baseline"
           hx-patch="/app/tournament/{{tournament.slug}}/overlay/{{overlay.id}}"
           hx-target="#manage-overlay"
           hx-indicator="#rename-button"
         >
+          <span>Gerenciando Overlay </span>
           <input type="text" value="{% if let Some(name) = overlay.name %}{{ name }}{% else %} {{ overlay.id }} {% endif %}" name="name" class="min-w-96 p-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
           <button id="rename-button" type="submit" class="flex flex-row bg-green-500 hover:bg-green-700 text-white text-bold rounded mx-2 py-2 px-4">
             <style>
@@ -156,7 +124,45 @@
             Renomear
           </button>
         </form>
-        <div hx-get="/app/tournament/{{tournament.slug}}/overlay/{{ overlay.id }}/teams" hx-trigger="load"></div>
+        <div class="flex flex-col">
+          <div class="flex flex-row border-b border-gray-200">
+            <style>
+              .active {
+                box-shadow: inset 0px -10px 1px 0px rgba(0,0,0,0.1);
+              }
+            </style>
+            <button
+               hx-get="/app/tournament/{{tournament.slug}}/overlay/{{ overlay.id }}/waiting"
+               hx-target="#setup-content"
+               hx-indicator=".setup-content-indicator"
+               hx-trigger="load, click"
+               _="on click remove .active from .active
+               then add .active to me"
+               class="tab-button w-full py-2 text-center text-gray-600 hover:text-blue-500 focus:outline-none active">
+              Tela Inicial / Pausa
+            </button>
+            <button
+               hx-get="/app/tournament/{{tournament.slug}}/overlay/{{ overlay.id }}/casters"
+               hx-target="#setup-content"
+               hx-indicator=".setup-content-indicator"
+               _="on click remove .active from .active
+               then add .active to me"
+               class="tab-button w-full py-2 text-center text-gray-600 hover:text-blue-500 focus:outline-none">
+              Casters
+            </button>
+            <button
+               hx-get="/app/tournament/{{tournament.slug}}/overlay/{{ overlay.id }}/teams"
+               hx-target="#setup-content"
+               hx-indicator=".setup-content-indicator"
+               _="on click remove .active from .active
+               then add .active to me"
+               class="tab-button w-full py-2 text-center text-gray-600 hover:text-blue-500 focus:outline-none">
+              Times / Ingame
+            </button>
+          </div>
+          <div class="setup-content-indicator w-full text-center"></div>
+          <div id="setup-content"></div>
+        </div>
         {% else %}
         <span>Selecione um overlay ao lado para gerenciar</span>
         {% endif %}

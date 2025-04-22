@@ -1,0 +1,82 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * from matches as matches\n               WHERE matches.id = $1\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "overlay_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "tournament_slug",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "team_a",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "team_b",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "team_a_score",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "team_b_score",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 7,
+        "name": "completed",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 8,
+        "name": "in_progress",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 9,
+        "name": "created_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 10,
+        "name": "updated_at",
+        "type_info": "Timestamp"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "9899e89aa1c5ebfec02ad31bbfeb7d5c63157ce4bd53929150283ca76f80dca3"
+}
