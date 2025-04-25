@@ -175,13 +175,19 @@ pub async fn todays_matches_overlay(
 
 #[derive(Debug, Deserialize)]
 pub struct TodaysMatchesUpdateForm {
+    #[serde(default)]
     #[serde(rename = "existing_match_id")]
     existing_match_ids: Vec<Uuid>,
+    #[serde(default)]
     #[serde(rename = "match_id")]
     match_ids: Vec<Uuid>,
+    #[serde(default)]
     team_a: Vec<String>,
+    #[serde(default)]
     team_a_score: Vec<i32>,
+    #[serde(default)]
     team_b: Vec<String>,
+    #[serde(default)]
     team_b_score: Vec<i32>,
     #[serde(default)]
     completed: Vec<Uuid>,

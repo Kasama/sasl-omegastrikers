@@ -108,7 +108,7 @@ query TournamentTeams($tournament: String) {
 
 query UserTournaments($perPage: Int, $page: Int) {
   currentUser {
-    tournaments(query: {perPage: $perPage, page: $page, filter: {videogameId: 45263}}) {
+    tournaments(query: {perPage: $perPage, page: $page, filter: {}}) {
       nodes {
         name,
         admins {
