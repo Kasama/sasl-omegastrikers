@@ -1,34 +1,20 @@
-use std::{error::Error, sync::Arc};
+use std::sync::Arc;
 
 use axum::{
     extract::{Query, State},
-    response::{IntoResponse, Redirect},
+    response::Redirect,
 };
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 use base64::Engine;
 use chrono::{Duration, Utc};
 use rand::{rngs::OsRng, TryRngCore};
-use reqwest::StatusCode;
 use url::Url;
 
 use crate::startgg::oauth::{
     self, OAuthCallbackParams, OAuthConfig, TokenResponse, REQUIRED_SCOPES,
 };
 
-pub struct AppError(pub String);
-
-impl<E: Error> From<E> for AppError {
-    fn from(value: E) -> Self {
-        AppError(value.to_string())
-    }
-}
-
-impl IntoResponse for AppError {
-    fn into_response(self) -> axum::response::Response {
-        (StatusCode::INTERNAL_SERVER_ERROR, self.0).into_response()
-    }
-}
-
+use super::error::AppError;
 use super::AppState;
 
 #[axum::debug_handler]
@@ -103,9 +89,7 @@ pub async fn oauth_callback_handler(
         _ => {
             tracing::warn!("OAuth state mismatch or cookie missing.");
             // You might want a specific error page here
-            return Err(AppError(
-                "OAuth State Mismatch, possibly old CSRF token, try refreshing".to_string(),
-            ));
+            return Err("OAuth State Mismatch, possibly old CSRF token, try refreshing".into());
         }
     }
 
@@ -125,9 +109,7 @@ pub async fn oauth_callback_handler(
 
     // Ensure max_age is positive
     let cookie_max_age_std = if cookie_max_age > Duration::zero() {
-        cookie_max_age
-            .to_std()
-            .map_err(|e| AppError(e.to_string()))?
+        cookie_max_age.to_std()?
     } else {
         // Expire immediately or don't set max_age if already expired?
         // Setting Max-Age=0 or a past date typically deletes the cookie.
@@ -222,10 +204,11 @@ async fn exchange_code_for_token(
             .await
             .unwrap_or_else(|_| "Could not read error body".to_string());
         tracing::error!("start.gg token exchange failed: {} - {}", status, body);
-        return Err(AppError(format!(
+        return Err(format!(
             "Failed to exchange code for token. Status: {}. Body: {}",
             status, body
-        )));
+        )
+        .into());
     }
 
     let token_response: TokenResponse = response.json().await?;

@@ -5,7 +5,7 @@ use axum::response::{IntoResponse, Redirect};
 
 use crate::startgg::auth::AuthSession;
 
-use super::auth::AppError;
+use super::error::AppError;
 use super::AppState;
 
 #[axum::debug_handler]

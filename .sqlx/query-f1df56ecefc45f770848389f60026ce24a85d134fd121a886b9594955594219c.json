@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * from team WHERE tournament_slug = $1",
+  "query": "SELECT * from team WHERE tournament_slug = $1 ORDER BY name ASC",
   "describe": {
     "columns": [
       {
@@ -42,5 +42,5 @@
       true
     ]
   },
-  "hash": "a9969afe4ea2216b018129041294617815ddeb0073d4724ec5ab08588646561c"
+  "hash": "f1df56ecefc45f770848389f60026ce24a85d134fd121a886b9594955594219c"
 }

@@ -1,5 +1,5 @@
 use crate::database::casters::Caster;
-use crate::routes::auth::AppError;
+use crate::routes::error::AppError;
 use crate::routes::sse::{SSEDestination, SSEvent, SSEventType};
 use crate::startgg::StartGGClient;
 use askama::Template;
@@ -30,10 +30,7 @@ pub async fn update_casters(
     tracing::info!("Updating casters for overlay {}: {:?}", overlay_id, form);
 
     let startgg_client = StartGGClient::new(&state.http_client, &auth_session.access_token);
-    let tournaments = startgg_client
-        .fetch_tournaments_organized_by_user()
-        .await
-        .map_err(|e| AppError(e.to_string()))?;
+    let tournaments = startgg_client.fetch_tournaments_organized_by_user().await?;
 
     let overlay = state.db.get_overlay(overlay_id).await?;
 
@@ -41,9 +38,7 @@ pub async fn update_casters(
         .iter()
         .any(|t| t.slug == overlay.tournament_slug)
     {
-        return Err(AppError(
-            "You are not allowed to update this overlay".to_string(),
-        ));
+        return Err("You are not allowed to update this overlay".into());
     };
 
     let caster_narrator = Caster {
@@ -53,11 +48,7 @@ pub async fn update_casters(
         stream_video: form.narrator_video,
     };
 
-    state
-        .db
-        .upsert_caster(&caster_narrator)
-        .await
-        .map_err(|e| AppError(e.to_string()))?;
+    state.db.upsert_caster(&caster_narrator).await?;
 
     let caster_commenter = Caster {
         overlay_id,
@@ -66,11 +57,7 @@ pub async fn update_casters(
         stream_video: form.commenter_video,
     };
 
-    state
-        .db
-        .upsert_caster(&caster_commenter)
-        .await
-        .map_err(|e| AppError(e.to_string()))?;
+    state.db.upsert_caster(&caster_commenter).await?;
 
     state.events_sender.send(SSEvent {
         destination: SSEDestination::Channel(format!("overlay_{}", overlay.id)),

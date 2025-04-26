@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::database::matches::Match;
 use crate::database::wait_timer::{WaitTimer, WaitType};
-use crate::routes::auth::AppError;
+use crate::routes::error::AppError;
 use crate::routes::sse::{SSEDestination, SSEvent, SSEventType};
 use crate::routes::tournament::get_tournament_teams;
 use crate::routes::views::filters;
@@ -88,14 +88,13 @@ pub async fn timer_update(
     Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
     Form(form): Form<TimerUpdateForm>,
 ) -> Result<impl IntoResponse, AppError> {
-    let naive_time = chrono::NaiveDateTime::parse_from_str(&form.waiting_until, "%Y-%m-%dT%H:%M")
-        .map_err(|e| AppError(e.to_string()))?;
+    let naive_time = chrono::NaiveDateTime::parse_from_str(&form.waiting_until, "%Y-%m-%dT%H:%M")?;
     let tz_offset = chrono::FixedOffset::west_opt(form.timezone_offset * 60)
         .unwrap_or_else(|| chrono::FixedOffset::west_opt(3 * 60 * 60).unwrap()); // Use America/Sao_Paulo as default
     let time = match naive_time.and_local_timezone(tz_offset) {
         chrono::offset::LocalResult::Single(s) => s,
         chrono::offset::LocalResult::Ambiguous(e, _) => e,
-        chrono::offset::LocalResult::None => return Err(AppError("Invalid time".to_string())),
+        chrono::offset::LocalResult::None => return Err("Invalid time".into()),
     };
 
     let wait_timer = WaitTimer {
@@ -104,11 +103,7 @@ pub async fn timer_update(
         wait_type: form.wait_type,
     };
 
-    state
-        .db
-        .upsert_wait_timer(&wait_timer)
-        .await
-        .map_err(|e| AppError(e.to_string()))?;
+    state.db.upsert_wait_timer(&wait_timer).await?;
 
     let wait_timer = get_wait_timer(state.clone(), &overlay_id).await;
 
@@ -159,11 +154,7 @@ pub async fn todays_matches_overlay(
     state: State<Arc<AppState>>,
     Path(overlay_id): Path<Uuid>,
 ) -> Result<impl IntoResponse, AppError> {
-    let matches = state
-        .db
-        .get_overlay_matches(overlay_id)
-        .await
-        .map_err(|e| AppError(e.to_string()))?;
+    let matches = state.db.get_overlay_matches(overlay_id).await?;
 
     Ok(Html(
         TodaysMatchesTemplate {
@@ -285,15 +276,9 @@ pub async fn todays_matches_update(
         });
     }
 
-    let teams = get_tournament_teams(state.clone(), &auth_session, &tournament_slug)
-        .await
-        .map_err(|e| AppError(e.to_string()))?;
+    let teams = get_tournament_teams(state.clone(), &auth_session, &tournament_slug).await?;
 
-    let matches = state
-        .db
-        .get_overlay_matches(overlay_id)
-        .await
-        .map_err(|e| AppError(e.to_string()))?;
+    let matches = state.db.get_overlay_matches(overlay_id).await?;
 
     let _ = state
         .events_sender
@@ -337,15 +322,9 @@ pub async fn waiting_setup(
     Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
     auth_session: AuthSession,
 ) -> Result<impl IntoResponse, AppError> {
-    let teams = get_tournament_teams(state.clone(), &auth_session, &tournament_slug)
-        .await
-        .map_err(|e| AppError(e.to_string()))?;
+    let teams = get_tournament_teams(state.clone(), &auth_session, &tournament_slug).await?;
 
-    let upcoming_matches = state
-        .db
-        .get_overlay_matches(overlay_id)
-        .await
-        .map_err(|e| AppError(e.to_string()))?;
+    let upcoming_matches = state.db.get_overlay_matches(overlay_id).await?;
 
     Ok(Html(
         WaitingSetupTemplate {

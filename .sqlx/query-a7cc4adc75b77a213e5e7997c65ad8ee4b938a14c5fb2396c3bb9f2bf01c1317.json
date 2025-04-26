@@ -1,0 +1,58 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * from scoreboard\n               WHERE overlay_id = $1\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "overlay_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "team_a",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "team_a_score",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
+        "name": "team_a_standing",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "team_b",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "team_b_score",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "team_b_standing",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "a7cc4adc75b77a213e5e7997c65ad8ee4b938a14c5fb2396c3bb9f2bf01c1317"
+}

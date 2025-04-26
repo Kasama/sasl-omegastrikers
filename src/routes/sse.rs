@@ -15,7 +15,7 @@ use tokio_stream::wrappers::BroadcastStream;
 
 use crate::startgg::auth::AuthSession;
 
-use super::auth::AppError;
+use super::error::AppError;
 use super::AppState;
 
 #[derive(Debug, Clone, Serialize)]

@@ -55,33 +55,90 @@
     <span class="bg-slate-300 w-full text-center font-bold py-2">
       Partida
     </span>
-    <form class="flex flex-col items-center" hx-put="/app/tournament/{{ tournament_slug }}/overlay/{{overlay_id}}/ingame" hx-target="previous span">
-      <div class="flex flex-row m-10">
+    <form class="flex flex-col items-center gap-6" hx-put="/app/tournament/{{ tournament_slug }}/overlay/{{overlay_id}}/ingame" hx-target="closest main">
+      <div class="flex flex-row mt-10">
         <div>
           <label for="team_a" class="block mb-2 text-sm font-medium text-gray-900">Team A:</label>
-          <select id="team_a" name="team_a" size="11"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          <select id="team_a"
+                  name="team_a"
+                  size="11"
+                  _="on change add .unsaved to .apply-scoreboard"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
             {% for team in teams %}
-            <option value={{ team.id }}>{{ team | team_full_name }} </option>
+            <option
+              {% if let Some((selected_team, _, _)) = selected_teams %}
+              {% if team.id == selected_team.id %}
+              selected
+              {% endif %}
+              {% endif %}
+              _="on click
+                put '{{ team | team_display_name }}' into #score_team_a_name
+                then put '0' into #score_team_a_score.value
+                then put '0' into #score_team_b_score.value"
+              value={{ team.id }}>
+              {{ team | team_full_name }}
+            </option>
             {% endfor %}
           </select>
         </div>
         <span class="px-5">vs</span>
         <div>
           <label for="team_b" class="block mb-2 text-sm font-medium text-gray-900">Team B:</label>
-          <select id="team_b" name="team_b" size="11"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5">
+          <select id="team_b"
+                  name="team_b"
+                  size="11"
+                  _="on change add .unsaved to .apply-scoreboard"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5">
             {% for team in teams %}
-            <option value={{ team.id }}>{{ team | team_full_name }} </option>
+            <option
+              {% if let Some((_, selected_team, _)) = selected_teams %}
+              {% if team.id == selected_team.id %}
+              selected
+              {% endif %}
+              {% endif %}
+              _="on click
+                put '{{ team | team_display_name }}' into #score_team_b_name
+                then put '0' into #score_team_a_score.value
+                then put '0' into #score_team_b_score.value"
+              value={{ team.id }}>
+              {{ team | team_full_name }}
+            </option>
             {% endfor %}
           </select>
         </div>
       </div>
+      {% if let Some((selected_team_a, selected_team_b, scoreboard)) = selected_teams %}
+      <div class="flex flex-row items-center">
+        <span id="score_team_a_name">{{selected_team_a | team_display_name}}</span>
+        <input type="number" name="team_a_score" min="0" max="9" value="{{scoreboard.team_a_score}}" id="score_team_a_score"
+                _="on change add .unsaved to .apply-scoreboard"
+               class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2">
+        <span>vs</span>
+        <input type="number" name="team_b_score" min="0" max="9" value="{{scoreboard.team_b_score}}" id="score_team_b_score"
+                _="on change add .unsaved to .apply-scoreboard"
+               class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-1 mx-2">
+        <span id="score_team_b_name">{{selected_team_b | team_display_name}}</span>
+      </div>
+      {% endif %}
       <div class="flex flex-row justify-between">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit"
-                                                                                             value="Submit">Save</button>
-        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                hx-post="/championship/clearMatch" hx-target="closest body">Clean Match</button>
+        <style>
+          button.unsaved::after {
+            background-color: hotpink;
+            border-radius: 100%;
+          }
+          button::after {
+            content: '';
+            display: block;
+            position: absolute;
+            right: -3px;
+            top: -3px;
+            width: 10px;
+            height: 10px;
+          }
+        </style>
+        <button class="apply-scoreboard bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" value="Submit">Aplicar</button>
+        <!-- <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" -->
+        <!--         hx-post="/championship/clearMatch" hx-target="closest body">Clean Match</button> -->
       </div>
     </form>
   </section>

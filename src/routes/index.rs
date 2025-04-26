@@ -8,7 +8,7 @@ use crate::startgg::auth::AuthSession;
 use crate::startgg::oauth::StartggUser;
 use crate::startgg::StartGGClient;
 
-use super::auth::AppError;
+use super::error::AppError;
 use super::views::filters;
 use super::AppState;
 

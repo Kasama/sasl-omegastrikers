@@ -4,7 +4,7 @@
 
 {% block main %}
 <div hx-ext="sse" sse-connect="/sse?channel=overlay_{{overlay_id}}">
-  <div class="overlay" sse-swap="ingame_overlay_update">
+  <div class="overlay" sse-swap="ingame_overlay_update" hx-get="/stream_overlay/{{overlay_id}}/ingame/scoreboard" hx-trigger="load">
   </div>
 </div>
 {% endblock main %}

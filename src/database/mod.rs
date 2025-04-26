@@ -2,6 +2,7 @@ pub mod casters;
 pub mod group;
 pub mod matches;
 pub mod overlay;
+pub mod scoreboard;
 pub mod team;
 pub mod user;
 pub mod wait_timer;

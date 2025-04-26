@@ -35,7 +35,7 @@ impl DB {
         tournament_slug: &str,
     ) -> Result<Vec<StartGGTeam>, anyhow::Error> {
         Ok(sqlx::query!(
-            "SELECT * from team WHERE tournament_slug = $1",
+            "SELECT * from team WHERE tournament_slug = $1 ORDER BY name ASC",
             tournament_slug
         )
         .fetch_all(&self.pool)

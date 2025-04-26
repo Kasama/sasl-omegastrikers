@@ -16,6 +16,7 @@ use crate::startgg::oauth::OAuthConfig;
 
 mod app;
 pub mod auth;
+pub mod error;
 mod index;
 mod sse;
 mod stream_overlay;
@@ -102,6 +103,7 @@ pub fn init_router(state: AppState) -> Router {
         )
         .nest("/stream_overlay/{overlay_id}", Router::new()
             .route("/ingame", get(stream_overlay::ingame_overlay))
+            .route("/ingame/scoreboard", get(stream_overlay::ingame_scoreboard))
             .route("/waiting", get(stream_overlay::waiting::waiting_overlay))
             .route("/waiting/timer", get(stream_overlay::waiting::timer_overlay))
             .route("/waiting/todays_matches", get(stream_overlay::waiting::todays_matches_overlay))
