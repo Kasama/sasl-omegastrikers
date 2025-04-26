@@ -35,13 +35,22 @@
       background-position: 0 5500px;
     }
   }
+  .bg-background {
+    background-color: #1D1D1D;
+  }
+  .bg-table {
+    background-color: #323232;
+  }
+  .bg-header {
+    background-color: #4180B0;
+  }
     </style>
-    <div class="background bg-gray-900 min-h-screen min-w-screen">
+    <div class="background bg-background min-h-screen min-w-screen">
       {% block casters_content %}
       <div class="container mx-auto px-4 py-8 flex flex-col min-h-screen" sse-swap="caster_overlay_update">
         <div class="flex flex-row flex-grow justify-center">
           <div class="flex flex-col flex-grow caster-portrait">
-            <div class="bg-slate-800 h-66 max-h-66 flex-grow">
+            <div class="bg-table h-66 max-h-66 flex-grow">
               {% if let Some(cs) = casters %}
               <iframe
                 class="w-full h-full"
@@ -50,7 +59,7 @@
               </iframe>
               {% endif %}
             </div>
-            <div class="bg-blue-700 text-white text-xl md:text-2xl font-bold py-2 px-4 text-center">
+            <div class="bg-header text-white text-xl md:text-2xl font-bold py-2 px-4 text-center">
               {% if let Some(cs) = casters %}
               {{ cs.0.name }}
               {% endif %}
@@ -62,7 +71,7 @@
           </div>
 
           <div class="flex flex-col flex-grow caster-portrait">
-            <div class="bg-slate-800 h-66 max-h-66 flex-grow">
+            <div class="bg-table h-66 max-h-66 flex-grow">
               {% if let Some(cs) = casters %}
               <iframe
                 class="w-full h-full"
@@ -71,7 +80,7 @@
               </iframe>
               {% endif %}
             </div>
-            <div class="bg-blue-700 text-white text-xl md:text-2xl font-bold py-2 px-4 text-center">
+            <div class="bg-header text-white text-xl md:text-2xl font-bold py-2 px-4 text-center">
               {% if let Some(cs) = casters %}
               {{ cs.1.name }}
               {% endif %}

@@ -23,17 +23,27 @@
       background-position: 0 5500px;
     }
   }
+
+  .bg-background {
+    background-color: #1D1D1D;
+  }
+  .bg-table {
+    background-color: #323232;
+  }
+  .bg-header {
+    background-color: #4180B0;
+  }
 </style>
 
-<div class="background bg-gray-900 min-h-screen min-w-screen">
+<div class="background min-h-screen min-w-screen">
   <div class="container mx-auto px-4 py-8 flex flex-col min-h-screen" hx-ext="sse" sse-connect="/sse?channel=overlay_{{overlay_id}}">
     <div class="flex flex-row gap-6 flex-grow">
       <!-- Left Column - Today's Matches -->
       <div class="flex flex-col">
-        <div class="bg-blue-700 text-white text-xl md:text-2xl font-bold py-2 px-4">
+        <div class="bg-header text-white text-xl md:text-2xl font-bold py-2 px-4">
           Partidas de Hoje
         </div>
-        <div class="bg-slate-800 max-h-66 flex-grow" sse-swap="todays_matches_update" hx-get="/stream_overlay/{{overlay_id}}/waiting/todays_matches" hx-trigger="load">
+        <div class="bg-table max-h-66 flex-grow" sse-swap="todays_matches_update" hx-get="/stream_overlay/{{overlay_id}}/waiting/todays_matches" hx-trigger="load">
         </div>
         <div class="w-72 h-72 flex flex-col justify-center items-center self-center">
           <img src="/assets/sasl-logo.png" alt="SASL Logo" class="w-full h-full object-contain">
@@ -42,10 +52,10 @@
 
       <!-- Right Column - League Table -->
       <div class="flex flex-col flex-grow">
-        <div class="bg-blue-700 text-white text-xl md:text-2xl font-bold py-2 px-4">
+        <div class="bg-header text-white text-xl md:text-2xl font-bold py-2 px-4">
           Tabela
         </div>
-        <div class="bg-slate-800 h-96 flex-grow">
+        <div class="bg-table h-96 flex-grow">
           <!-- check brackets with brickbat/saya -->
         </div>
       </div>

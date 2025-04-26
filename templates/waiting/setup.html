@@ -160,6 +160,9 @@ function form_children() {
         <div class="flex flex-row justify-center items-center my-4">
           <h3 class="mr-2 font-semibold text-gray-900">Esperando até</h3>
           <div class="flex flex-row">
+            <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
+            <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> -->
+
             <input type="datetime-local" name="waiting_until"
               _="on change add .unsaved to .pause-save"
               {% if let Some(t) =  wait_timer %}
