@@ -15,8 +15,8 @@ jobs:
           shuttle-api-key: ${{ secrets.SHUTTLE_API_KEY }}
           project-id: proj_01JR9NHSKVD9X5KH8CHEWR1J59
           secrets: |
-            discord_bot_token = "${{ secrets.DISCORD_BOT_TOKEN }}"
-            omegastrikers_identity_file = "/home/roberto/.local/share/Steam/steamapps/compatdata/1869590/pfx/drive_c/users/steamuser/AppData/Local/OmegaStrikers/identity.json"
-            startgg_oauth_client_id = "${{ secrets.STARTGG_OAUTH_CLIENT_ID }}"
-            startgg_oauth_client_secret = "${{ secrets.STARTGG_OAUTH_CLIENT_SECRET }}"
-            startgg_redirect_uri = "https://sasl-omegastrikers.robertoalegro.com/oauth/startgg_callback"
+            discord_bot_token = '${{ secrets.DISCORD_BOT_TOKEN }}'
+            omegastrikers_identity_file = '/home/roberto/.local/share/Steam/steamapps/compatdata/1869590/pfx/drive_c/users/steamuser/AppData/Local/OmegaStrikers/identity.json'
+            startgg_oauth_client_id = '${{ secrets.STARTGG_OAUTH_CLIENT_ID }}'
+            startgg_oauth_client_secret = '${{ secrets.STARTGG_OAUTH_CLIENT_SECRET }}'
+            startgg_redirect_uri = 'https://sasl-omegastrikers.robertoalegro.com/oauth/startgg_callback'
