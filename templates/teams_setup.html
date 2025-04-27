@@ -63,7 +63,7 @@
                   name="team_a"
                   size="11"
                   _="on change add .unsaved to .apply-scoreboard"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg border-blue-300 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
             {% for team in teams %}
             <option
               {% if let Some((selected_team, _, _)) = selected_teams %}
@@ -88,7 +88,7 @@
                   name="team_b"
                   size="11"
                   _="on change add .unsaved to .apply-scoreboard"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5">
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg border-pink-300 focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5">
             {% for team in teams %}
             <option
               {% if let Some((_, selected_team, _)) = selected_teams %}
