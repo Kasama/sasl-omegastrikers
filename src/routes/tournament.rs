@@ -236,14 +236,14 @@ pub async fn team_setup_handler(
     Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
     auth_session: AuthSession,
 ) -> Result<impl IntoResponse, AppError> {
-    let selected_teams = (|| async {
+    let selected_teams = async {
         let scoreboard = state.db.get_scoreboard(overlay_id).await.ok()?;
 
         let team_a = state.db.get_team(&scoreboard.team_a).await.ok()?;
         let team_b = state.db.get_team(&scoreboard.team_b).await.ok()?;
 
         Some((team_a, team_b, scoreboard))
-    })()
+    }
     .await;
 
     let teams = get_tournament_teams(state, &auth_session, &tournament_slug).await?;
@@ -303,14 +303,14 @@ pub async fn update_team_nickname(
 
     state.db.upsert_team(&tournament_slug, &t).await?;
 
-    let selected_teams = (|| async {
+    let selected_teams = async {
         let scoreboard = state.db.get_scoreboard(overlay_id).await.ok()?;
 
         let team_a = state.db.get_team(&scoreboard.team_a).await.ok()?;
         let team_b = state.db.get_team(&scoreboard.team_b).await.ok()?;
 
         Some((team_a, team_b, scoreboard))
-    })()
+    }
     .await;
 
     let teams = get_tournament_teams(state, &auth_session, &tournament_slug).await?;

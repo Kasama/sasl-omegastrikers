@@ -80,51 +80,6 @@ async fn shuttle_main(
     Ok(shuttle_axum::AxumService(router))
 }
 
-// #[cfg(debug_assertions)]
-// #[tokio::main]
-// async fn main() -> anyhow::Result<()> {
-//     use std::sync::Arc;
-
-//     use clap::Parser;
-//     use dotenvy::dotenv;
-//     use tokio::net::TcpListener;
-//     use tracing_bunyan_formatter::BunyanFormattingLayer;
-//     use tracing_subscriber::layer::SubscriberExt;
-//     use tracing_subscriber::EnvFilter;
-
-//     _ = dotenv(); // ignore errors if there is no .env file
-
-//     let app = Arc::new(App::parse());
-
-//     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
-//     let formatting_layer = BunyanFormattingLayer::new(app.app_name.clone(), std::io::stdout);
-
-//     let subscriber = tracing_subscriber::Registry::default()
-//         .with(env_filter)
-//         .with(tracing_bunyan_formatter::JsonStorageLayer)
-//         .with(formatting_layer);
-
-//     tracing::subscriber::set_global_default(subscriber)
-//         .expect("Failed to setup tracing subscriber");
-
-//     let db = Arc::new(database::DB::new(&app.db_url).await?);
-
-//     let router = common_main(
-//         db,
-//         &app.omegastrikers_identity_file,
-//         &app.discord_bot_token,
-//         &app.startgg_oauth_client_id,
-//         &app.startgg_oauth_client_secret,
-//         &app.startgg_redirect_uri,
-//     )
-//     .await?;
-//     let listener = TcpListener::bind(&app.listen_address).await?;
-
-//     axum::serve(listener, router.into_make_service()).await?;
-
-//     Ok(())
-// }
-
 async fn common_main(
     db: Arc<DB>,
     omegastrikers_identity_file: &str,
