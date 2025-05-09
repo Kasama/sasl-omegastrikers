@@ -10,6 +10,7 @@ use futures_util::future::join_all;
 use serde::Deserialize;
 use uuid::Uuid;
 
+use crate::database::casters::Caster;
 use crate::database::overlay::Overlay;
 use crate::database::scoreboard::Scoreboard;
 use crate::startgg::auth::AuthSession;
@@ -331,6 +332,7 @@ pub async fn update_team_nickname(
 pub struct CastersSetup {
     pub tournament_slug: String,
     pub overlay: Overlay,
+    pub casters: Option<(Caster, Caster)>,
 }
 
 #[axum::debug_handler]
@@ -341,9 +343,17 @@ pub async fn casters_handler(
 ) -> Result<impl IntoResponse, AppError> {
     let overlay = state.db.get_overlay(overlay_id).await?;
 
+    let db_casters = state.db.get_casters(&overlay_id).await?;
+    let casters = if db_casters.len() == 2 {
+        Some((db_casters[0].clone(), db_casters[1].clone()))
+    } else {
+        None
+    };
+
     Ok(Html(
         CastersSetup {
             overlay,
+            casters,
             tournament_slug,
         }
         .render()?,

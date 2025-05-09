@@ -109,15 +109,53 @@
       </div>
       {% if let Some((selected_team_a, selected_team_b, scoreboard)) = selected_teams %}
       <div class="flex flex-row items-center">
-        <span id="score_team_a_name">{{selected_team_a | team_display_name}}</span>
-        <input type="number" name="team_a_score" min="0" max="9" value="{{scoreboard.team_a_score}}" id="score_team_a_score"
-                _="on change add .unsaved to .apply-scoreboard"
-               class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2">
+        <div class="flex flex-col items-end">
+          <div class="flex flex-row items-center">
+            <span id="score_team_a_name">{{selected_team_a | team_display_name}}</span>
+            <input
+                  type="number"
+                  name="team_a_score"
+                  min="0"
+                  max="9"
+                  value="{{scoreboard.team_a_score}}"
+                  id="score_team_a_score"
+                  _="on change add .unsaved to .apply-scoreboard"
+                  class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2">
+          </div>
+          <div class="flex flex-row items-center">
+            <input
+                  type="text"
+                  name="team_a_standing"
+                  value="{{scoreboard.team_a_standing}}"
+                  id="score_team_a_standing"
+                  _="on change add .unsaved to .apply-scoreboard"
+                  class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2 text-right">
+          </div>
+        </div>
         <span>vs</span>
-        <input type="number" name="team_b_score" min="0" max="9" value="{{scoreboard.team_b_score}}" id="score_team_b_score"
-                _="on change add .unsaved to .apply-scoreboard"
+        <div class="flex flex-col items-start">
+          <div class="flex flex-row items-center">
+            <input
+               type="number"
+               name="team_b_score"
+               min="0"
+               max="9"
+               value="{{scoreboard.team_b_score}}"
+               id="score_team_b_score"
+               _="on change add .unsaved to .apply-scoreboard"
                class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-1 mx-2">
-        <span id="score_team_b_name">{{selected_team_b | team_display_name}}</span>
+            <span id="score_team_b_name">{{selected_team_b | team_display_name}}</span>
+          </div>
+          <div class="flex flex-row items-center">
+            <input
+               type="text"
+               name="team_b_standing"
+               value="{{scoreboard.team_b_standing}}"
+               id="score_team_b_standing"
+               _="on change add .unsaved to .apply-scoreboard"
+               class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-1 mx-2">
+          </div>
+        </div>
       </div>
       {% endif %}
       <div class="flex flex-row justify-between">
@@ -137,8 +175,6 @@
           }
         </style>
         <button class="apply-scoreboard bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit" value="Submit">Aplicar</button>
-        <!-- <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" -->
-        <!--         hx-post="/championship/clearMatch" hx-target="closest body">Clean Match</button> -->
       </div>
     </form>
   </section>

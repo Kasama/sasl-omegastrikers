@@ -50,6 +50,8 @@ pub struct UpdateTeamForm {
     team_a_score: i32,
     #[serde(default)]
     team_b_score: i32,
+    team_a_standing: Option<String>,
+    team_b_standing: Option<String>,
 }
 #[axum::debug_handler]
 pub async fn update_ingame_scoreboard(
@@ -66,8 +68,8 @@ pub async fn update_ingame_scoreboard(
         team_b: form.team_b,
         team_a_score: form.team_a_score,
         team_b_score: form.team_b_score,
-        team_a_standing: "0-0".to_string(),
-        team_b_standing: "0-0".to_string(),
+        team_a_standing: form.team_a_standing.unwrap_or("0-0".to_string()),
+        team_b_standing: form.team_b_standing.unwrap_or("0-0".to_string()),
     };
 
     let scoreboard = state.db.upsert_scoreboard(scoreboard).await?;

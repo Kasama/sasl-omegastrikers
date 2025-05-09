@@ -33,6 +33,9 @@
         <span class="w-full text-center bg-slate-300">Narrador</span>
         <div class="flex flex-row item-baseline">
           <input type="text" id="narrator" placeholder="Nome do narrador" name="narrator"
+            {% if let Some(cs) = casters %}
+            value="{{ cs.0.name }}"
+            {% endif %}
             class="min-w-96 p-2 border-gray-300 rounded-md shadow-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
         </div>
         <span class="flex flex-row items-center mb-2 w-full">
@@ -64,6 +67,9 @@
         <span class="w-full text-center bg-slate-300">Comentarista</span>
         <div class="flex flex-row item-baseline">
           <input type="text" id="commenter" placeholder="Nome do comentarista" name="commenter"
+            {% if let Some(cs) = casters %}
+            value="{{ cs.1.name }}"
+            {% endif %}
             class="min-w-96 p-2 border-gray-300 rounded-md shadow-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
         </div>
         <span class="flex flex-row items-center mb-2 w-full">
