@@ -1,4 +1,5 @@
 {% extends "base/page.html" %}
+{%- import "base/macros.html" as macros -%}
 
 {% block title %}Gerenciar: {{tournament.name}}{% endblock title %}
 
@@ -95,7 +96,7 @@
         {% block manageoverlay %}
         {% if let Some(overlay) = selected_overlay %}
         <form
-          class="flex flex-row items-baseline"
+          class="flex flex-row items-center"
           hx-patch="/app/tournament/{{tournament.slug}}/overlay/{{overlay.id}}"
           hx-target="#manage-overlay"
           hx-indicator="#rename-button"
@@ -123,6 +124,7 @@
             </style>
             Renomear
           </button>
+          {% call macros::copy_button("Copiar link do background para o OBS", format!("window.location.origin + '/stream_overlay/{}/background'", overlay.id)) %}
         </form>
         <div class="flex flex-col">
           <div class="flex flex-row border-b border-gray-200">

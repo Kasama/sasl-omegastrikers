@@ -59,7 +59,7 @@
             </svg>
           </button>
           <a class="hover:text-blue-900 transition duration-300 ease-in-out flex-grow"
-            href='{{overlay.id | vdo_invite_link("narrator")}}' target="_blank">Convite para narrador</a>
+            href='{{ filters::vdo_invite_link(overlay.id, "narrator")? }}' target="_blank">Convite para narrador</a>
         </span>
         <input type="hidden" name="narrator_video" value='{{ overlay.id | vdo_view_link("narrator") }}'>
       </div>
@@ -93,7 +93,7 @@
             </svg>
           </button>
           <a class="hover:text-blue-900 transition duration-300 ease-in-out flex-grow"
-            href='{{overlay.id | vdo_invite_link("commenter")}}' target="_blank">Convite para comentarista</a>
+            href='{{ filters::vdo_invite_link(overlay.id, "commenter")? }}' target="_blank">Convite para comentarista</a>
         </span>
         <input type="hidden" name="commenter_video" value='{{ overlay.id | vdo_view_link("commenter") }}'>
       </div>

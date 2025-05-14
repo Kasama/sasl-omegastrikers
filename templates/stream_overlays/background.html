@@ -1,0 +1,35 @@
+{% extends "base/overlay.html" %}
+
+{% block title %} Background {% endblock title %}
+
+{% block head %}
+{% call super() %}
+{% endblock head %}
+
+{% block main %}
+<style>
+  .background {
+    background-image: url('/assets/background-logo.png');
+    background-repeat: repeat;
+    background-size: 500px;
+    animation: scrollBackground 500s linear infinite;
+  }
+
+  @keyframes scrollBackground {
+    from {
+      background-position: 5500px 0;
+    }
+
+    to {
+      background-position: 0 5500px;
+    }
+  }
+
+  .bg-background {
+    background-color: #1D1D1D;
+  }
+</style>
+
+<div class="background bg-background min-h-screen min-w-screen"></div>
+
+{% endblock main %}

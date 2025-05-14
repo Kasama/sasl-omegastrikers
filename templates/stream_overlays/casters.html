@@ -18,6 +18,7 @@
   .caster-portrait {
     max-width: 600px;
     max-height: 600px;
+    min-height: 600px;
   }
 
   .background {
@@ -45,57 +46,49 @@
     background-color: #4180B0;
   }
     </style>
-    <div class="background bg-background min-h-screen min-w-screen">
-      {% block casters_content %}
-      <div class="container mx-auto px-4 py-8 flex flex-col min-h-screen" sse-swap="caster_overlay_update">
-        <div class="flex flex-row flex-grow justify-center">
-          <div class="flex flex-col flex-grow caster-portrait">
-            <div class="bg-table h-66 max-h-66 flex-grow">
-              {% if let Some(cs) = casters %}
-              <iframe
-                class="w-full h-full"
-                src="{{ cs.0.stream_video }}"
-                frameborder="0">
-              </iframe>
-              {% endif %}
-            </div>
-            <div class="bg-header text-white text-4xl font-bold py-2 px-4 text-center">
-              {% if let Some(cs) = casters %}
-              {{ cs.0.name }}
-              {% endif %}
-            </div>
+    {% block casters_content %}
+    <div class="mx-auto px-4 py-8 flex flex-col" sse-swap="caster_overlay_update">
+      <div class="flex flex-row flex-grow justify-center">
+        <div class="flex flex-col flex-grow caster-portrait">
+          <div class="bg-table h-66 min-h-66 max-h-66 flex-grow">
+            {% if let Some(cs) = casters %}
+            <iframe
+              class="w-full h-full"
+              src="{{ cs.0.stream_video }}"
+              frameborder="0">
+            </iframe>
+            {% endif %}
           </div>
-
-          <div class="w-72 h-72 flex flex-col justify-center items-center self-center casters-logo">
-            <img src="/assets/SASL-with-text.png" alt="SASL Logo" class="w-full h-full object-contain">
-          </div>
-
-          <div class="flex flex-col flex-grow caster-portrait">
-            <div class="bg-table h-66 max-h-66 flex-grow">
-              {% if let Some(cs) = casters %}
-              <iframe
-                class="w-full h-full"
-                src="{{ cs.1.stream_video }}"
-                frameborder="0">
-              </iframe>
-              {% endif %}
-            </div>
-            <div class="bg-header text-white text-4xl font-bold py-2 px-4 text-center">
-              {% if let Some(cs) = casters %}
-              {{ cs.1.name }}
-              {% endif %}
-            </div>
+          <div class="bg-header text-white text-4xl font-bold py-2 px-4 text-center">
+            {% if let Some(cs) = casters %}
+            {{ cs.0.name }}
+            {% endif %}
           </div>
         </div>
 
-        <div class="mt-8 flex flex-col flex-shrink justify-between items-center">
-          <!-- Starting Soon Text -->
-          <div class="text-white text-2xl md:text-4xl font-bold text-center my-20">
+        <div class="w-72 h-72 flex flex-col justify-center items-center self-center casters-logo">
+          <img src="/assets/SASL-with-text.png" alt="SASL Logo" class="w-full h-full object-contain">
+        </div>
+
+        <div class="flex flex-col flex-grow caster-portrait">
+          <div class="bg-table h-66 min-h-66 max-h-66 flex-grow">
+            {% if let Some(cs) = casters %}
+            <iframe
+              class="w-full h-full"
+              src="{{ cs.1.stream_video }}"
+              frameborder="0">
+            </iframe>
+            {% endif %}
+          </div>
+          <div class="bg-header text-white text-4xl font-bold py-2 px-4 text-center">
+            {% if let Some(cs) = casters %}
+            {{ cs.1.name }}
+            {% endif %}
           </div>
         </div>
       </div>
-      {% endblock casters_content %}
     </div>
+    {% endblock casters_content %}
   </div>
 </div>
 

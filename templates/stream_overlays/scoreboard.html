@@ -27,21 +27,21 @@
     align-items: center;
     border-radius: 12px;
     color: white;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 60px;
     background: radial-gradient(circle at center, #323232, #2b2b2b);
     border: 1px solid #818181;
   }
 
   .team-standings {
-    width: 120px;
+    min-width: 120px;
     height: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 12px;
     color: white;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 32px;
     background: radial-gradient(circle at center, #323232, #2b2b2b);
     border: 1px solid #818181;
@@ -63,12 +63,16 @@
     border-top-right-radius: 0px;
     border-bottom-right-radius: 40px;
     align-self: flex-start;
+    padding-right: 35px;
+    padding-left: 10px;
   }
 
   .team-standings.left {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 40px;
     align-self: flex-end;
+    padding-left: 35px;
+    padding-right: 10px;
   }
 
   .score-box {
@@ -99,38 +103,49 @@
     border-radius: 50%;
     margin-right: -10px;
     margin-left: -10px;
-    background-color: #1a1a1a;
+    background: radial-gradient(circle at center, #323232, #2b2b2b);
     border: 1px solid #818181;
     z-index: 20;
   }
+
+  .centralized-container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    align-items: center;
+  }
 </style>
 
-<div class="flex flex-row">
-  <div class="team-container">
-    <div class="flex flex-col">
-      <div class="team-name left">
-        {% if let Some(img) = team_a.image %}
-        <img class="mr-2" style="height: 118px; width: 118px" src="{{img.url}}" alt="">
-        {% endif %}
-        {{ team_a | team_display_name }}
+<div class="centralized-container">
+  <div class="flex flex-row">
+    <div class="team-container">
+      <div class="flex flex-col">
+        <div class="team-name left">
+          <!-- {% if let Some(img) = team_a.image %} -->
+          <!-- <img class="mr-2" style="height: 118px; width: 118px" src="{{img.url}}" alt=""> -->
+          <!-- {% endif %} -->
+          {{ team_a | team_display_name }}
+        </div>
+        <div class="team-standings left">{{ team_a_standing }}</div>
       </div>
-      <div class="team-standings left">{{ team_a_standing }}</div>
+      <div class="score-box blue"> {{ team_a_score }}</div>
     </div>
-    <div class="score-box blue"> {{ team_a_score }}</div>
-  </div>
 
-  <img src="/assets/sasl-logo.png" alt="SASL Logo" class="logo-circle">
+    <div class="logo-circle flex items-center justify-center">
+      <img src="/assets/amongtitans.png" alt="SASL Logo" style="width: 100%">
+    </div>
 
-  <div class="team-container">
-    <div class="score-box red">{{ team_b_score }}</div>
-    <div class="flex flex-col">
-      <div class="team-name right">
-        {{ team_b | team_display_name }}
-        {% if let Some(img) = team_b.image %}
-        <img class="ml-2" style="height: 118px; width: 118px" src="{{img.url}}" alt="">
-        {% endif %}
+    <div class="team-container">
+      <div class="score-box red">{{ team_b_score }}</div>
+      <div class="flex flex-col">
+        <div class="team-name right">
+          {{ team_b | team_display_name }}
+          <!-- {% if let Some(img) = team_b.image %} -->
+          <!-- <img class="ml-2" style="height: 118px; width: 118px" src="{{img.url}}" alt=""> -->
+          <!-- {% endif %} -->
+        </div>
+        <div class="team-standings right">{{ team_b_standing }}</div>
       </div>
-      <div class="team-standings right">{{ team_b_standing }}</div>
     </div>
   </div>
 </div>

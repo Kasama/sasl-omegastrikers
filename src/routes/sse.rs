@@ -31,7 +31,11 @@ pub enum SSEventType {
     IngameOverlayUpdate,
     CasterOverlayUpdate,
     TodaysMatchesUpdate,
+    NextMatchInfoUpdate,
+    ChampionshipPhaseUpdate,
     WaitInfoUpdate,
+    WaitInfoStandaloneUpdate,
+    WebsocketEvent,
 }
 
 impl Display for SSEventType {

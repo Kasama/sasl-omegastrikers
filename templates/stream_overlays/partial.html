@@ -1,0 +1,15 @@
+{% extends "base/overlay.html" %}
+
+{% block title %} Waiting Overlay {% endblock title %}
+
+{% block head %}
+{% call super() %}
+{% endblock head %}
+
+{% block main %}
+
+<div hx-ext="sse" sse-connect="/sse?channel=overlay_{{overlay_id}}" sse-swap="{{partial_name}}"
+  hx-get="/stream_overlay/{{overlay_id}}/partial?name={{partial_name}}" hx-trigger="load">
+</div>
+
+{% endblock main %}

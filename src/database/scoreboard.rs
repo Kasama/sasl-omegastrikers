@@ -11,6 +11,7 @@ pub struct Scoreboard {
     pub team_b_score: i32,
     pub team_a_standing: String,
     pub team_b_standing: String,
+    pub championship_phase: Option<String>,
 }
 
 impl DB {
@@ -33,6 +34,7 @@ impl DB {
             team_b_score: row.team_b_score,
             team_a_standing: row.team_a_standing.unwrap_or_default(),
             team_b_standing: row.team_b_standing.unwrap_or_default(),
+            championship_phase: row.championship_phase,
         })
     }
 
@@ -52,7 +54,8 @@ impl DB {
                     team_a_score = $4,
                     team_b_score = $5,
                     team_a_standing = $6,
-                    team_b_standing = $7
+                    team_b_standing = $7,
+                    championship_phase = $8
             "#,
             scoreboard.overlay_id,
             scoreboard.team_a,
@@ -61,6 +64,7 @@ impl DB {
             scoreboard.team_b_score,
             scoreboard.team_a_standing,
             scoreboard.team_b_standing,
+            scoreboard.championship_phase,
         );
         query
             .execute(&self.pool)

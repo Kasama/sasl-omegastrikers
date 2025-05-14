@@ -12,27 +12,47 @@
   display: table-cell;
   white-space: nowrap;
 }
+
+.bg-background {
+  background-color: #1D1D1D;
+}
+.bg-table {
+  background-color: #323232;
+}
+.bg-header {
+  background-color: #4180B0;
+}
 </style>
-<div class="matches-grid grid grid-cols-3 w-full text-xl font-bold text-white my-4">
-  {% for match_ in todays_matches %}
-  <div class="team text-right flex flex-row items-center justify-end {% if match_.completed %} text-gray-400 {% else if match_.in_progress -%} text-white animate-pulse {%- else %} text-white {%- endif %}">
-    <span class="text-4xl">{{match_.team_a | team_display_name }}</span>
-    {% if let Some(img) = match_.team_a.image %}
-    <img class="ml-2 max-h-10 max-w-10 rounded-full" src="{{img.url}}" alt="">
-    {% endif %}
-    <span class="ml-2 text-4xl {% if match_.completed %}{% if match_.team_a_score < match_.team_b_score %} text-red-400 {% else %} text-green-400 {% endif %}{% endif %}">
-      {{match_.team_a_score}}
-    </span>
+<div class="flex flex-col">
+  <div class="bg-header text-white text-xl font-bold py-2 px-4">
+    Partidas de Hoje
   </div>
-  <span class="font-bold mx-4 text-2xl vs {% if match_.completed %}text-blue-400{% else %}text-gray-400{% endif %}">vs</span>
-  <div class="team text-left flex flex-row items-center justify-start {% if match_.completed %} text-gray-400 {% else if match_.in_progress -%} text-white animate-pulse {%- else %} text-white {%- endif %}">
-    <span class="mr-2 text-4xl {% if match_.completed %}{% if match_.team_b_score < match_.team_a_score %} text-red-400 {% else %} text-green-400 {% endif %}{% endif %}">
-      {{match_.team_b_score}}
-    </span>
-    {% if let Some(img) = match_.team_b.image %}
-    <img class="mr-2 max-h-10 max-w-10 rounded-full" src="{{img.url}}" alt="">
-    {% endif %}
-    <span class="text-4xl">{{match_.team_b | team_display_name }}</span>
+  <div class="px-4 bg-table max-h-66 flex-grow text-white">
+    <div class="matches-grid grid grid-cols-3 w-full text-xl font-bold text-white my-4">
+      {% for match_ in todays_matches %}
+      <div class="team text-right flex flex-row items-center justify-end {% if match_.completed %} text-gray-400 {% else if match_.in_progress -%} text-white animate-pulse {%- else %} text-white {%- endif %}">
+        <span class="text-4xl">{{match_.team_a | team_display_name }}</span>
+        {% if let Some(img) = match_.team_a.image %}
+        <img class="ml-2 max-h-10 max-w-10 rounded-full" src="{{img.url}}" alt="">
+        {% endif %}
+        <span class="ml-2 text-4xl {% if match_.completed %}{% if match_.team_a_score < match_.team_b_score %} text-red-400 {% else %} text-green-400 {% endif %}{% endif %}">
+          {{match_.team_a_score}}
+        </span>
+      </div>
+      <span class="font-bold mx-4 text-2xl vs {% if match_.completed %}text-blue-400{% else %}text-gray-400{% endif %}">vs</span>
+      <div class="team text-left flex flex-row items-center justify-start {% if match_.completed %} text-gray-400 {% else if match_.in_progress -%} text-white animate-pulse {%- else %} text-white {%- endif %}">
+        <span class="mr-2 text-4xl {% if match_.completed %}{% if match_.team_b_score < match_.team_a_score %} text-red-400 {% else %} text-green-400 {% endif %}{% endif %}">
+          {{match_.team_b_score}}
+        </span>
+        {% if let Some(img) = match_.team_b.image %}
+        <img class="mr-2 max-h-10 max-w-10 rounded-full" src="{{img.url}}" alt="">
+        {% endif %}
+        <span class="text-4xl">{{match_.team_b | team_display_name }}</span>
+      </div>
+      {% endfor %}
+    </div>
   </div>
-  {% endfor %}
+  <div class="w-72 h-72 flex flex-col justify-center items-center self-center">
+    <img src="/assets/SASL-with-text.png" alt="SASL Logo" class="w-full h-full object-contain">
+  </div>
 </div>

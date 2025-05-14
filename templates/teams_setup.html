@@ -1,23 +1,14 @@
+{%- import "base/macros.html" as macros -%}
+
 <main hx-swap="outerHTML" class="mt-4 text-center flex flex-col items-center justify-center">
   <section class="w-3/4 flex flex-col my-6 item-center">
     <span class="bg-slate-300 w-full text-center font-bold py-2">
       Overlay
     </span>
-    <button _="
-            on click
-            writeText(window.location.origin + '/stream_overlay/{{overlay_id}}/ingame') on navigator.clipboard
-            then put 'Link copiado' into #notification-popup
-            send notification to #notification-popup
-            "
-      class="transition w-fit duration-300 ease-in-out bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex flex-row items-center self-center m-4"
-      hx-disable type="button" title="copiar overlay de casters para o obs">
-      <span>Copiar link do overlay do placar / ingame para o OBS</span>
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-        stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-      </svg>
-    </button>
+    <div class="flex flex-col">
+      {% call macros::copy_button("Copiar link do overlay do placar / ingame para o OBS", format!("window.location.origin + '/stream_overlay/{}/ingame'", self.overlay_id)) %}
+      {% call macros::copy_button("Copiar link da fase do campeonato", format!("window.location.origin + '/stream_overlay/{}/ingame/championship_phase'", self.overlay_id), "green") %}
+    </div>
   </section>
   <section class="w-3/4 flex flex-col my-6 item-center">
     <span class="bg-slate-300 w-full text-center font-bold py-2">
@@ -108,53 +99,65 @@
         </div>
       </div>
       {% if let Some((selected_team_a, selected_team_b, scoreboard)) = selected_teams %}
-      <div class="flex flex-row items-center">
-        <div class="flex flex-col items-end">
-          <div class="flex flex-row items-center">
-            <span id="score_team_a_name">{{selected_team_a | team_display_name}}</span>
-            <input
-                  type="number"
-                  name="team_a_score"
-                  min="0"
-                  max="9"
-                  value="{{scoreboard.team_a_score}}"
-                  id="score_team_a_score"
-                  _="on change add .unsaved to .apply-scoreboard"
-                  class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2">
+      <div class="flex flex-col items-center">
+        <div class="flex flex-row items-center">
+          <div class="flex flex-col items-end">
+            <div class="flex flex-row items-center">
+              <span id="score_team_a_name">{{selected_team_a | team_display_name}}</span>
+              <input
+                    type="number"
+                    name="team_a_score"
+                    min="0"
+                    max="9"
+                    value="{{scoreboard.team_a_score}}"
+                    id="score_team_a_score"
+                    _="on change add .unsaved to .apply-scoreboard"
+                    class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2">
+            </div>
+            <div class="flex flex-row items-center">
+              <input
+                 type="text"
+                 name="team_a_standing"
+                 value="{{scoreboard.team_a_standing}}"
+                 id="score_team_a_standing"
+                 _="on change add .unsaved to .apply-scoreboard"
+                 class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2 text-right">
+            </div>
           </div>
-          <div class="flex flex-row items-center">
-            <input
-                  type="text"
-                  name="team_a_standing"
-                  value="{{scoreboard.team_a_standing}}"
-                  id="score_team_a_standing"
-                  _="on change add .unsaved to .apply-scoreboard"
-                  class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2 text-right">
+          <span>vs</span>
+          <div class="flex flex-col items-start">
+            <div class="flex flex-row items-center">
+              <input
+                 type="number"
+                 name="team_b_score"
+                 min="0"
+                 max="9"
+                 value="{{scoreboard.team_b_score}}"
+                 id="score_team_b_score"
+                 _="on change add .unsaved to .apply-scoreboard"
+                 class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-1 mx-2">
+              <span id="score_team_b_name">{{selected_team_b | team_display_name}}</span>
+            </div>
+            <div class="flex flex-row items-center">
+              <input
+                 type="text"
+                 name="team_b_standing"
+                 value="{{scoreboard.team_b_standing}}"
+                 id="score_team_b_standing"
+                 _="on change add .unsaved to .apply-scoreboard"
+                 class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-1 mx-2">
+            </div>
           </div>
         </div>
-        <span>vs</span>
-        <div class="flex flex-col items-start">
-          <div class="flex flex-row items-center">
-            <input
-               type="number"
-               name="team_b_score"
-               min="0"
-               max="9"
-               value="{{scoreboard.team_b_score}}"
-               id="score_team_b_score"
-               _="on change add .unsaved to .apply-scoreboard"
-               class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-1 mx-2">
-            <span id="score_team_b_name">{{selected_team_b | team_display_name}}</span>
-          </div>
-          <div class="flex flex-row items-center">
-            <input
-               type="text"
-               name="team_b_standing"
-               value="{{scoreboard.team_b_standing}}"
-               id="score_team_b_standing"
-               _="on change add .unsaved to .apply-scoreboard"
-               class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-1 mx-2">
-          </div>
+        <div class="mt-2">
+          <input
+             type="text"
+             name="championship_phase"
+             value="{% if let Some(phase) = scoreboard.championship_phase %}{{phase}}{% endif %}"
+             placeholder="Fase do campeonato"
+             id="championship_phase"
+             _="on change add .unsaved to .apply-scoreboard"
+             class="bg-gray-50 border border-violet-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block p-1 mx-2">
         </div>
       </div>
       {% endif %}

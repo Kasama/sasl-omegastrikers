@@ -1,3 +1,5 @@
+{%- import "base/macros.html" as macros -%}
+
 {% macro teamselector(selected_team_a="false", score_a="0", selected_team_b="false", score_b="0", in_progress=false, completed=false, match_id="00000000-0000-0000-0000-000000000000") %}
 <div class="team-selector flex flex-row justify-center items-center w-full">
   <input type="hidden" value="{{ match_id }}" name="match_id">
@@ -55,21 +57,14 @@
     <span class="bg-slate-300 w-full text-center font-bold py-2">
       Overlay
     </span>
-    <button _="
-            on click
-            writeText(window.location.origin + '/stream_overlay/{{overlay_id}}/waiting') on navigator.clipboard
-            then put 'Link copiado' into #notification-popup
-            send notification to #notification-popup
-            "
-      class="transition w-fit duration-300 ease-in-out bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex flex-row items-center self-center m-4"
-      hx-disable type="button" title="copiar overlay de casters para o obs">
-      <span>Copiar link do overlay de espera para o OBS</span>
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-        stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-      </svg>
-    </button>
+    <div class="flex flex-col">
+      {% call macros::copy_button("Copiar link do overlay de espera para o OBS", format!("window.location.origin + '/stream_overlay/{}/waiting'", self.overlay_id)) %}
+      <span>partes sozinhas</span>
+      <div class="flex flex-row justify-evenly">
+        {% call macros::copy_button("Copiar link do proximo time sozinho", format!("window.location.origin + '/stream_overlay/{}/waiting/next_up_match'", self.overlay_id), "green") %}
+        {% call macros::copy_button("Copiar link do timer sozinho", format!("window.location.origin + '/stream_overlay/{}/waiting/standalone_timer'", self.overlay_id), "orange") %}
+      </div>
+    </div>
   </section>
   <section class="w-3/4 flex flex-col gap-6">
     <div id="team-selector-template" style="display: none">

@@ -1,0 +1,36 @@
+{% extends "base/overlay.html" %}
+
+{% block title %} Próximo Jogo {% endblock title %}
+
+{% block main %}
+<style>
+  .background {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .borders {
+    border: 5px solid #4180B0;
+    border-radius: 10px;
+  }
+
+  .teams {
+    border-top: 5px solid #4180B0;
+  }
+</style>
+<div class="flex flex-col w-screen items-center" hx-ext="sse" sse-connect="/sse?channel=overlay_{{overlay_id}}" >
+  <div class="flex flex-col items-center justify-center w-fit background text-white font-bold borders">
+    <div class="text-4xl py-2 px-4">
+      PRÓXIMO JOGO
+    </div>
+    {% block next_match_info %}
+    <div class="teams w-full py-2 px-4 justify-center items-center flex-row flex" sse-swap="next_match_info_update" hx-swap="outerHTML">
+      {% if let Some(match_) = todays_matches.first() %}
+      <span class="text-4xl">{{match_.team_a | team_display_name }}</span>
+      <span class="text-2xl mx-4">vs</span>
+      <span class="text-4xl">{{match_.team_b | team_display_name }}</span>
+      {% endif %}
+    </div>
+    {% endblock next_match_info %}
+  </div>
+</div>
+{% endblock main %}

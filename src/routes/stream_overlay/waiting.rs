@@ -13,6 +13,7 @@ use askama::Template;
 use axum::extract::{Path, State};
 use axum::response::{Html, IntoResponse};
 use axum_extra::extract::Form;
+use axum_htmx::HxRequest;
 use futures_util::future::join_all;
 use serde::Deserialize;
 use uuid::Uuid;
@@ -69,6 +70,37 @@ pub async fn timer_overlay(
 }
 
 #[derive(Template)]
+#[template(path = "stream_overlays/waiting/standalone_timer.html", blocks = ["wait_info"])]
+pub struct StandaloneTimerTemplate {
+    pub overlay_id: Uuid,
+    pub wait_timer: Option<WaitTimer>,
+}
+
+#[axum::debug_handler]
+pub async fn standalone_timer_overlay(
+    State(state): State<Arc<AppState>>,
+    HxRequest(hx_request): HxRequest,
+    Path(overlay_id): Path<Uuid>,
+) -> Result<impl IntoResponse, AppError> {
+    let wait_timer = get_wait_timer(state, &overlay_id).await;
+
+    Ok(Html(if hx_request {
+        StandaloneTimerTemplate {
+            overlay_id,
+            wait_timer,
+        }
+        .as_wait_info()
+        .render()?
+    } else {
+        StandaloneTimerTemplate {
+            overlay_id,
+            wait_timer,
+        }
+        .render()?
+    }))
+}
+
+#[derive(Template)]
 #[template(path = "waiting/setup.html", block = "wait_section")]
 pub struct WaitTimerSetupTemplate {
     pub overlay_id: Uuid,
@@ -122,6 +154,21 @@ pub async fn timer_update(
             tracing::error!("Failed to send wait timer update: {}", e);
         });
 
+    let _ = state
+        .events_sender
+        .send(SSEvent {
+            destination: SSEDestination::Channel(format!("overlay_{}", overlay_id)),
+            event: SSEventType::WaitInfoStandaloneUpdate,
+            data: StandaloneTimerTemplate {
+                overlay_id,
+                wait_timer: wait_timer.clone(),
+            }
+            .render()?,
+        })
+        .inspect_err(|e| {
+            tracing::error!("Failed to send wait timer update: {}", e);
+        });
+
     Ok(Html(
         WaitTimerSetupTemplate {
             overlay_id,
@@ -158,6 +205,29 @@ pub async fn todays_matches_overlay(
 
     Ok(Html(
         TodaysMatchesTemplate {
+            todays_matches: matches,
+        }
+        .render()?,
+    ))
+}
+
+#[derive(Template)]
+#[template(path = "stream_overlays/waiting/next_up_match.html", blocks = ["next_match_info"])]
+pub struct NextUpMatchTemplate {
+    pub overlay_id: Uuid,
+    pub todays_matches: Vec<Match>,
+}
+
+#[axum::debug_handler]
+pub async fn todays_matches_single_overlay(
+    state: State<Arc<AppState>>,
+    Path(overlay_id): Path<Uuid>,
+) -> Result<impl IntoResponse, AppError> {
+    let matches = state.db.get_overlay_matches(overlay_id).await?;
+
+    Ok(Html(
+        NextUpMatchTemplate {
+            overlay_id,
             todays_matches: matches,
         }
         .render()?,
@@ -288,6 +358,22 @@ pub async fn todays_matches_update(
             data: TodaysMatchesTemplate {
                 todays_matches: matches.clone(),
             }
+            .render()?,
+        })
+        .inspect_err(|e| {
+            tracing::error!("Failed to send todays matches update: {}", e);
+        });
+
+    let _ = state
+        .events_sender
+        .send(SSEvent {
+            destination: SSEDestination::Channel(format!("overlay_{}", overlay_id)),
+            event: SSEventType::NextMatchInfoUpdate,
+            data: NextUpMatchTemplate {
+                overlay_id,
+                todays_matches: matches.clone(),
+            }
+            .as_next_match_info()
             .render()?,
         })
         .inspect_err(|e| {

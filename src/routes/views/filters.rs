@@ -3,7 +3,10 @@ use uuid::Uuid;
 use crate::startgg::oauth::StartggUser;
 use crate::startgg::tournaments::{StartGGImage, StartGGTeam};
 
-pub fn get_smallest_image(images: &[StartGGImage]) -> askama::Result<Option<&StartGGImage>> {
+pub fn get_smallest_image<'a>(
+    images: &'a [StartGGImage],
+    _values: &'_ dyn askama::Values,
+) -> askama::Result<Option<&'a StartGGImage>> {
     Ok(images.iter().reduce(|im, ne| {
         if im.width * im.height > ne.width * ne.height {
             ne
@@ -13,7 +16,10 @@ pub fn get_smallest_image(images: &[StartGGImage]) -> askama::Result<Option<&Sta
     }))
 }
 
-pub fn user_display_name(user: &StartggUser) -> askama::Result<&str> {
+pub fn user_display_name<'a>(
+    user: &'a StartggUser,
+    _values: &dyn askama::Values,
+) -> askama::Result<&'a str> {
     Ok(if let Some(ref name) = user.gamer_tag {
         name
     } else {
@@ -21,7 +27,10 @@ pub fn user_display_name(user: &StartggUser) -> askama::Result<&str> {
     })
 }
 
-pub fn team_display_name(team: &StartGGTeam) -> askama::Result<&str> {
+pub fn team_display_name<'a>(
+    team: &'a StartGGTeam,
+    _values: &dyn askama::Values,
+) -> askama::Result<&'a str> {
     Ok(if let Some(ref nickname) = team.nickname {
         if nickname.is_empty() {
             &team.name
@@ -33,7 +42,7 @@ pub fn team_display_name(team: &StartGGTeam) -> askama::Result<&str> {
     })
 }
 
-pub fn team_full_name(team: &StartGGTeam) -> askama::Result<String> {
+pub fn team_full_name(team: &StartGGTeam, _values: &dyn askama::Values) -> askama::Result<String> {
     Ok(if let Some(ref nickname) = team.nickname {
         if nickname.is_empty() {
             team.name.clone()
@@ -60,7 +69,7 @@ pub fn vdo_invite_link(uuid: &Uuid, kind: &str) -> askama::Result<String> {
     ))
 }
 
-pub fn vdo_view_link(uuid: &Uuid, kind: &str) -> askama::Result<String> {
+pub fn vdo_view_link(uuid: &Uuid, _values: &dyn askama::Values, kind: &str) -> askama::Result<String> {
     Ok(format!(
         "https://vdo.ninja/?view={}&solo&room={}",
         kind,
@@ -68,14 +77,17 @@ pub fn vdo_view_link(uuid: &Uuid, kind: &str) -> askama::Result<String> {
     ))
 }
 
-pub fn vdo_director_link(uuid: &Uuid) -> askama::Result<String> {
+pub fn vdo_director_link(uuid: &Uuid, _values: &dyn askama::Values) -> askama::Result<String> {
     Ok(format!(
         "https://vdo.ninja/?director={}",
         uuid_to_vdo_id(uuid)?
     ))
 }
 
-pub fn duration_text(duration: &chrono::Duration) -> askama::Result<Option<String>> {
+pub fn duration_text(
+    duration: &chrono::Duration,
+    _values: &dyn askama::Values,
+) -> askama::Result<Option<String>> {
     if duration <= &chrono::Duration::zero() {
         return Ok(None);
     }
@@ -101,6 +113,9 @@ pub fn duration_text(duration: &chrono::Duration) -> askama::Result<Option<Strin
     Ok(Some(result))
 }
 
-pub fn datetime_format(dt: &chrono::DateTime<chrono::FixedOffset>) -> askama::Result<String> {
+pub fn datetime_format(
+    dt: &chrono::DateTime<chrono::FixedOffset>,
+    _values: &dyn askama::Values,
+) -> askama::Result<String> {
     Ok(dt.format("%Y-%m-%dT%H:%M:%S").to_string())
 }

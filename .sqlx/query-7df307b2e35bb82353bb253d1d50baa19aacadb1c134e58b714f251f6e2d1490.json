@@ -1,0 +1,21 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO scoreboard\n                (overlay_id, team_a, team_b, team_a_score, team_b_score, team_a_standing, team_b_standing)\n                VALUES\n                ($1, $2, $3, $4, $5, $6, $7)\n                ON CONFLICT (overlay_id) DO\n                UPDATE SET\n                    team_a = $2,\n                    team_b = $3,\n                    team_a_score = $4,\n                    team_b_score = $5,\n                    team_a_standing = $6,\n                    team_b_standing = $7,\n                    championship_phase = $8\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Varchar",
+        "Varchar",
+        "Int4",
+        "Int4",
+        "Varchar",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7df307b2e35bb82353bb253d1d50baa19aacadb1c134e58b714f251f6e2d1490"
+}
