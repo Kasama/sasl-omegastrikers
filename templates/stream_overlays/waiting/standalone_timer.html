@@ -4,9 +4,9 @@
 
 {% block main %}
 <style>
-.background {
-  background-color: rgba(0, 0, 0, 0.8);
-}
+  .background {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 
   .borders {
     border: 5px solid #4180B0;
@@ -15,6 +15,8 @@
 
   .max-size {
     max-width: 370px;
+    min-width: 370px;
+    width: 370px;
   }
 </style>
 
@@ -22,19 +24,19 @@
   {% block wait_info %}
   {% if let Some(wait_timer) = wait_timer %}
   <div class="flex flex-col items-center justify-center w-fit background text-white font-bold borders max-size">
-    <div class="text-4xl py-2 px-4">
+    <div class="text-4xl pt-4">
       {% match wait_timer.wait_type %}
       {% when WaitType::Starting %}
       COMEÇAMOS
       {% when WaitType::Break %}
       VOLTAMOS
       {% when WaitType::Ending %}
-      OBRIGADO PELA PRESENÇA
+      OBRIGADO
       {% when WaitType::Nothing %}
       {% endmatch %}
     </div>
     {% if WaitType::Ending != wait_timer.wait_type %}
-    <div class="w-full py-2 px-4 justify-center items-center flex-row flex text-4xl gap-3" hx-trigger="load, every 1s" hx-target="find span" hx-get="/stream_overlay/{{overlay_id}}/waiting/timer">
+    <div class="w-full px-4 pb-4 justify-center items-center flex-row flex text-4xl gap-3" hx-trigger="load, every 1s" hx-target="find span" hx-get="/stream_overlay/{{overlay_id}}/waiting/timer">
       EM <span hx-swap="outerHTML">BREVE</span>
     </div>
     {% endif %}
