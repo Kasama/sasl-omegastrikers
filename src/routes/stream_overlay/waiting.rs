@@ -254,6 +254,8 @@ pub struct TodaysMatchesUpdateForm {
     completed: Vec<Uuid>,
     #[serde(default)]
     in_progress: Vec<Uuid>,
+    #[serde(default)]
+    featured: Vec<Uuid>,
 }
 
 #[axum::debug_handler]
@@ -309,6 +311,7 @@ pub async fn todays_matches_update(
             let tournament_slug = tournament_slug.clone();
             let completed = todays_matches_form.completed.contains(&match_id);
             let in_progress = todays_matches_form.in_progress.contains(&match_id);
+            let featured = todays_matches_form.featured.contains(&match_id);
             async move {
                 let m = Match {
                     id: match_id,
@@ -320,6 +323,7 @@ pub async fn todays_matches_update(
                     team_b_score: score_b,
                     completed,
                     in_progress,
+                    featured,
                 };
 
                 st.db.upsert_match(m).await

@@ -1,0 +1,64 @@
+{% extends "base/page.html" %}
+
+{% block title %}Obs controller{% endblock title %}
+
+{% block head %}
+{% call super() %}
+{% endblock head %}
+
+{% block main %}
+<div>
+  Yeah, that's obs alright?
+
+  <script src="https://cdn.jsdelivr.net/npm/obs-websocket-js@5.0.6/dist/obs-ws.global.min.js"></script>
+  <script type="module">
+    import {onCleanup, createSignal, Show } from "https://esm.sh/solid-js@1.8.1";
+    import {render} from "https://esm.sh/solid-js@1.8.1/web";
+    import html from "https://esm.sh/solid-js@1.8.1/html";
+
+    const [connected, setConnected] = createSignal(false);
+    const [count, setCount] = createSignal(0);
+
+    const ConnectedIndicator = () => {
+      return html`<${Show} when=${connected} fallback=${html`<div>not connected</div>`}>
+      <div>${count} Connected</div>
+      <//>`
+    };
+
+    const ConnectButton = () => {
+      const connect = (e) => {
+        setConnected(true);
+        setCount(count() + 1);
+      };
+      return html`<button onClick=${connect}>Connect</button>`
+    }
+
+    const App = () => {
+      onCleanup(() => {});
+
+      return html`<div>
+        <div><${ConnectedIndicator} /></div>
+        <${ConnectButton} />
+      </div>`
+    };
+
+    render(App, solid_content);
+  </script>
+  <script>
+    function connect() {
+      const obs = new OBSWebSocket();
+
+      const connection = obs.connect(url = 'ws://127.0.0.1:4455').then(connection => {
+        console.log("connected");
+      }).catch(err => {
+        console.error("failed to connect:", err);
+      });
+    }
+
+  </script>
+
+  <button onclick="connect()">Connect</button>
+
+  <div id="solid_content"></div>
+</div>
+{% endblock main %}

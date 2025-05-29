@@ -45,6 +45,7 @@ pub async fn get_scoreboard(
         team_a_standing: scoreboard.team_a_standing,
         team_b_score: scoreboard.team_b_score,
         team_b_standing: scoreboard.team_b_standing,
+        logo: scoreboard.logo,
     })
 }
 
@@ -133,6 +134,8 @@ pub struct UpdateTeamForm {
     team_a_standing: Option<String>,
     team_b_standing: Option<String>,
     championship_phase: Option<String>,
+    #[serde(rename = "tournament_logo")]
+    logo: String,
 }
 #[axum::debug_handler]
 pub async fn update_ingame_scoreboard(
@@ -152,6 +155,7 @@ pub async fn update_ingame_scoreboard(
         team_a_standing: form.team_a_standing.unwrap_or("0-0".to_string()),
         team_b_standing: form.team_b_standing.unwrap_or("0-0".to_string()),
         championship_phase: form.championship_phase,
+        logo: form.logo,
     };
 
     let scoreboard = state.db.upsert_scoreboard(scoreboard).await?;
@@ -169,6 +173,7 @@ pub async fn update_ingame_scoreboard(
             team_a_standing: scoreboard.team_a_standing.clone(),
             team_b_score: scoreboard.team_b_score,
             team_b_standing: scoreboard.team_b_standing.clone(),
+            logo: scoreboard.logo.clone(),
         }
         .render()?,
     })?;
@@ -221,7 +226,11 @@ pub async fn ingame_championship_phase(
 ) -> Result<impl IntoResponse, AppError> {
     let scoreboard = state.db.get_scoreboard(overlay_id).await?;
 
-    Ok(Html(get_championhip_phase(scoreboard, overlay_id).await?.render()?))
+    Ok(Html(
+        get_championhip_phase(scoreboard, overlay_id)
+            .await?
+            .render()?,
+    ))
 }
 
 #[derive(Template)]
@@ -239,6 +248,7 @@ pub struct ScoreboardTemplate {
     pub team_b: StartGGTeam,
     pub team_b_score: i32,
     pub team_b_standing: String,
+    pub logo: String,
 }
 
 #[derive(Template)]

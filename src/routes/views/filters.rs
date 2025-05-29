@@ -1,5 +1,6 @@
 use uuid::Uuid;
 
+use crate::database::matches::Match;
 use crate::startgg::oauth::StartggUser;
 use crate::startgg::tournaments::{StartGGImage, StartGGTeam};
 
@@ -69,7 +70,11 @@ pub fn vdo_invite_link(uuid: &Uuid, kind: &str) -> askama::Result<String> {
     ))
 }
 
-pub fn vdo_view_link(uuid: &Uuid, _values: &dyn askama::Values, kind: &str) -> askama::Result<String> {
+pub fn vdo_view_link(
+    uuid: &Uuid,
+    _values: &dyn askama::Values,
+    kind: &str,
+) -> askama::Result<String> {
     Ok(format!(
         "https://vdo.ninja/?view={}&solo&room={}",
         kind,
@@ -118,4 +123,8 @@ pub fn datetime_format(
     _values: &dyn askama::Values,
 ) -> askama::Result<String> {
     Ok(dt.format("%Y-%m-%dT%H:%M:%S").to_string())
+}
+
+pub fn has_featured(matches: &[Match], _values: &dyn askama::Values) -> askama::Result<bool> {
+    Ok(matches.iter().any(|m| m.featured))
 }

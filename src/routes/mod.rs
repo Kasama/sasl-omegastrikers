@@ -18,6 +18,7 @@ mod app;
 pub mod auth;
 pub mod error;
 mod index;
+mod obs;
 mod sse;
 mod stream_overlay;
 mod tournament;
@@ -90,9 +91,11 @@ pub fn init_router(state: AppState) -> Router {
                     .route("/overlay", put(tournament::create_overlay))
                     .nest("/overlay/{overlay_id}", Router::new()
                         .route("/", delete(tournament::delete_overlay).patch(tournament::update_overlay))
+                        .route("/obs-config", get(obs::obs_page))
                         .route("/teams", get(tournament::team_setup_handler))
                         .route("/ingame", put(stream_overlay::update_ingame_scoreboard))
                         .route("/teams/nickname", post(tournament::update_team_nickname))
+                        .route("/teams/image", post(tournament::update_team_image))
                         .route("/casters", get(tournament::casters_handler).put(stream_overlay::casters::update_casters))
                         .route("/waiting", get(stream_overlay::waiting::waiting_setup))
                         .route("/waiting/matches", post(stream_overlay::waiting::todays_matches_update))

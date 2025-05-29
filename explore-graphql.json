@@ -1,0 +1,985 @@
+{
+  "data": {
+    "tournament": {
+      "id": 756267,
+      "addrState": null,
+      "admins": [
+        {
+          "slug": "user/5509bc70"
+        },
+        {
+          "slug": "user/f4115a49"
+        }
+      ],
+      "city": null,
+      "countryCode": null,
+      "currency": "USD",
+      "endAt": 1742093760,
+      "eventRegistrationClosesAt": null,
+      "events": [
+        {
+          "id": 1310424,
+          "checkInBuffer": 900,
+          "competitionTier": 5,
+          "createdAt": 1738854498,
+          "hasDecks": false,
+          "images": [],
+          "isOnline": true,
+          "league": null,
+          "matchRulesMarkdown": null,
+          "name": "Estrelas Nascentes SA",
+          "numEntrants": 10,
+          "phases": [
+            {
+              "id": 1921259
+            },
+            {
+              "id": 1921260
+            }
+          ],
+          "phaseGroups": [
+            {
+              "bracketUrl": "https://www.start.gg/tournament/omega-strikers-estrelas-nascentes-sa-3-edi-o/events/estrelas-nascentes-sa/brackets/1921259/2824204",
+              "bracketType": "ROUND_ROBIN",
+              "tiebreakOrder": [
+                {
+                  "type": "wins",
+                  "inputs": []
+                },
+                {
+                  "type": "game_ratio",
+                  "inputs": []
+                },
+                {
+                  "type": "head_to_head",
+                  "inputs": []
+                }
+              ],
+              "numRounds": null,
+              "seedMap": null,
+              "phase": {
+                "id": 1921259,
+                "name": "Grupos"
+              },
+              "rounds": [],
+              "sets": {
+                "nodes": [
+                  {
+                    "id": 86966083,
+                    "completedAt": 1742764866,
+                    "createdAt": 1742756212,
+                    "displayScore": "marmotes 0 - Dragões do Midfield 2",
+                    "event": {
+                      "id": 1310424,
+                      "name": "Estrelas Nascentes SA"
+                    },
+                    "fullRoundText": "Round 5",
+                    "hasPlaceholder": false,
+                    "identifier": "I",
+                    "images": [],
+                    "lPlacement": null,
+                    "phaseGroup": {
+                      "id": 2824204,
+                      "displayIdentifier": "1"
+                    },
+                    "resetAffectedData": {
+                      "affectedSetCount": 4
+                    },
+                    "round": 5,
+                    "setGamesType": 1,
+                    "slots": [
+                      {
+                        "prereqId": "34024105",
+                        "prereqType": "seed",
+                        "prereqPlacement": null,
+                        "slotIndex": 0,
+                        "seed": {
+                          "id": 34024105,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "marmotes"
+                          },
+                          "groupSeedNum": 1,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Grupos"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "1"
+                          },
+                          "placeholderName": null,
+                          "placement": 3,
+                          "progressionSeedId": null,
+                          "setRecordWithoutByes": {
+                            "wins": 2,
+                            "losses": 2,
+                            "winPercentage": "50%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 2,
+                          "stats": {
+                            "score": {
+                              "value": 0
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "marmotes"
+                          }
+                        }
+                      },
+                      {
+                        "prereqId": "34024114",
+                        "prereqType": "seed",
+                        "prereqPlacement": null,
+                        "slotIndex": 1,
+                        "seed": {
+                          "id": 34024114,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "Dragões do Midfield"
+                          },
+                          "groupSeedNum": 2,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Grupos"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "1"
+                          },
+                          "placeholderName": null,
+                          "placement": 2,
+                          "progressionSeedId": 34022406,
+                          "setRecordWithoutByes": {
+                            "wins": 3,
+                            "losses": 3,
+                            "winPercentage": "50%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 1,
+                          "stats": {
+                            "score": {
+                              "value": 2
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "Dragões do Midfield"
+                          }
+                        }
+                      }
+                    ],
+                    "startAt": null,
+                    "totalGames": 5,
+                    "wPlacement": null,
+                    "winnerId": 19574975
+                  },
+                  {
+                    "id": 86966084,
+                    "completedAt": 1742763390,
+                    "createdAt": 1742756212,
+                    "displayScore": "DST | DISTINTOS SEM TENTAÇÃO 2 - HIV 0",
+                    "event": {
+                      "id": 1310424,
+                      "name": "Estrelas Nascentes SA"
+                    },
+                    "fullRoundText": "Round 5",
+                    "hasPlaceholder": false,
+                    "identifier": "J",
+                    "images": [],
+                    "lPlacement": null,
+                    "phaseGroup": {
+                      "id": 2824204,
+                      "displayIdentifier": "1"
+                    },
+                    "resetAffectedData": {
+                      "affectedSetCount": 4
+                    },
+                    "round": 5,
+                    "setGamesType": 1,
+                    "slots": [
+                      {
+                        "prereqId": "34024108",
+                        "prereqType": "seed",
+                        "prereqPlacement": null,
+                        "slotIndex": 0,
+                        "seed": {
+                          "id": 34024108,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "DST | DISTINTOS SEM TENTAÇÃO"
+                          },
+                          "groupSeedNum": 4,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Grupos"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "1"
+                          },
+                          "placeholderName": null,
+                          "placement": 1,
+                          "progressionSeedId": 34022404,
+                          "setRecordWithoutByes": {
+                            "wins": 6,
+                            "losses": 0,
+                            "winPercentage": "100%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 1,
+                          "stats": {
+                            "score": {
+                              "value": 2
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "DST | DISTINTOS SEM TENTAÇÃO"
+                          }
+                        }
+                      },
+                      {
+                        "prereqId": "34024109",
+                        "prereqType": "seed",
+                        "prereqPlacement": null,
+                        "slotIndex": 1,
+                        "seed": {
+                          "id": 34024109,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "HIV"
+                          },
+                          "groupSeedNum": 5,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Grupos"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "1"
+                          },
+                          "placeholderName": null,
+                          "placement": 5,
+                          "progressionSeedId": null,
+                          "setRecordWithoutByes": {
+                            "wins": 0,
+                            "losses": 4,
+                            "winPercentage": "0%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 2,
+                          "stats": {
+                            "score": {
+                              "value": 0
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "HIV"
+                          }
+                        }
+                      }
+                    ],
+                    "startAt": null,
+                    "totalGames": 5,
+                    "wPlacement": null,
+                    "winnerId": 19540204
+                  }
+                ]
+              }
+            },
+            {
+              "bracketUrl": "https://www.start.gg/tournament/omega-strikers-estrelas-nascentes-sa-3-edi-o/events/estrelas-nascentes-sa/brackets/1921259/2828142",
+              "bracketType": "ROUND_ROBIN",
+              "tiebreakOrder": [
+                {
+                  "type": "wins",
+                  "inputs": []
+                },
+                {
+                  "type": "game_ratio",
+                  "inputs": []
+                },
+                {
+                  "type": "head_to_head",
+                  "inputs": []
+                }
+              ],
+              "numRounds": null,
+              "seedMap": null,
+              "phase": {
+                "id": 1921259,
+                "name": "Grupos"
+              },
+              "rounds": [],
+              "sets": {
+                "nodes": [
+                  {
+                    "id": 86966139,
+                    "completedAt": 1742767863,
+                    "createdAt": 1742756330,
+                    "displayScore": "maxi cocido 0 - Cinzenta Fan Club 2",
+                    "event": {
+                      "id": 1310424,
+                      "name": "Estrelas Nascentes SA"
+                    },
+                    "fullRoundText": "Round 5",
+                    "hasPlaceholder": false,
+                    "identifier": "I",
+                    "images": [],
+                    "lPlacement": null,
+                    "phaseGroup": {
+                      "id": 2828142,
+                      "displayIdentifier": "2"
+                    },
+                    "resetAffectedData": {
+                      "affectedSetCount": 4
+                    },
+                    "round": 5,
+                    "setGamesType": 1,
+                    "slots": [
+                      {
+                        "prereqId": "34024106",
+                        "prereqType": "seed",
+                        "prereqPlacement": null,
+                        "slotIndex": 0,
+                        "seed": {
+                          "id": 34024106,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "maxi cocido"
+                          },
+                          "groupSeedNum": 1,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Grupos"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "2"
+                          },
+                          "placeholderName": null,
+                          "placement": 1,
+                          "progressionSeedId": 34022405,
+                          "setRecordWithoutByes": {
+                            "wins": 4,
+                            "losses": 2,
+                            "winPercentage": "66.67%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 2,
+                          "stats": {
+                            "score": {
+                              "value": 0
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "maxi cocido"
+                          }
+                        }
+                      },
+                      {
+                        "prereqId": "34024113",
+                        "prereqType": "seed",
+                        "prereqPlacement": null,
+                        "slotIndex": 1,
+                        "seed": {
+                          "id": 34024113,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "Cinzenta Fan Club"
+                          },
+                          "groupSeedNum": 2,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Grupos"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "2"
+                          },
+                          "placeholderName": null,
+                          "placement": 2,
+                          "progressionSeedId": 34022407,
+                          "setRecordWithoutByes": {
+                            "wins": 4,
+                            "losses": 2,
+                            "winPercentage": "66.67%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 1,
+                          "stats": {
+                            "score": {
+                              "value": 2
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "Cinzenta Fan Club"
+                          }
+                        }
+                      }
+                    ],
+                    "startAt": null,
+                    "totalGames": 5,
+                    "wPlacement": null,
+                    "winnerId": 19541949
+                  },
+                  {
+                    "id": 86966140,
+                    "completedAt": 1742764161,
+                    "createdAt": 1742756330,
+                    "displayScore": "PLAY BETTER WIN MORE/PBWM 2 - Los Pitufos 0",
+                    "event": {
+                      "id": 1310424,
+                      "name": "Estrelas Nascentes SA"
+                    },
+                    "fullRoundText": "Round 5",
+                    "hasPlaceholder": false,
+                    "identifier": "J",
+                    "images": [],
+                    "lPlacement": null,
+                    "phaseGroup": {
+                      "id": 2828142,
+                      "displayIdentifier": "2"
+                    },
+                    "resetAffectedData": {
+                      "affectedSetCount": 4
+                    },
+                    "round": 5,
+                    "setGamesType": 1,
+                    "slots": [
+                      {
+                        "prereqId": "34024112",
+                        "prereqType": "seed",
+                        "prereqPlacement": null,
+                        "slotIndex": 0,
+                        "seed": {
+                          "id": 34024112,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "PLAY BETTER WIN MORE/PBWM"
+                          },
+                          "groupSeedNum": 4,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Grupos"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "2"
+                          },
+                          "placeholderName": null,
+                          "placement": 4,
+                          "progressionSeedId": null,
+                          "setRecordWithoutByes": {
+                            "wins": 1,
+                            "losses": 3,
+                            "winPercentage": "25%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 1,
+                          "stats": {
+                            "score": {
+                              "value": 2
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "PLAY BETTER WIN MORE/PBWM"
+                          }
+                        }
+                      },
+                      {
+                        "prereqId": "34024111",
+                        "prereqType": "seed",
+                        "prereqPlacement": null,
+                        "slotIndex": 1,
+                        "seed": {
+                          "id": 34024111,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "Los Pitufos"
+                          },
+                          "groupSeedNum": 5,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Grupos"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "2"
+                          },
+                          "placeholderName": null,
+                          "placement": 5,
+                          "progressionSeedId": null,
+                          "setRecordWithoutByes": {
+                            "wins": 0,
+                            "losses": 4,
+                            "winPercentage": "0%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 2,
+                          "stats": {
+                            "score": {
+                              "value": 0
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "Los Pitufos"
+                          }
+                        }
+                      }
+                    ],
+                    "startAt": null,
+                    "totalGames": 5,
+                    "wPlacement": null,
+                    "winnerId": 19570648
+                  }
+                ]
+              }
+            },
+            {
+              "bracketUrl": "https://www.start.gg/tournament/omega-strikers-estrelas-nascentes-sa-3-edi-o/events/estrelas-nascentes-sa/brackets/1921260/2824205",
+              "bracketType": "SINGLE_ELIMINATION",
+              "tiebreakOrder": [],
+              "numRounds": null,
+              "seedMap": {
+                "1": [
+                  1,
+                  4,
+                  2,
+                  3
+                ]
+              },
+              "phase": {
+                "id": 1921260,
+                "name": "Mata-Mata"
+              },
+              "rounds": [
+                {
+                  "number": 2,
+                  "bestOf": 3
+                },
+                {
+                  "number": 3,
+                  "bestOf": 3
+                }
+              ],
+              "sets": {
+                "nodes": [
+                  {
+                    "id": 86988948,
+                    "completedAt": 1742790094,
+                    "createdAt": 1742790027,
+                    "displayScore": "Dragões do Midfield 2 - Cinzenta Fan Club 3",
+                    "event": {
+                      "id": 1310424,
+                      "name": "Estrelas Nascentes SA"
+                    },
+                    "fullRoundText": "3rd Place Tiebreak",
+                    "hasPlaceholder": false,
+                    "identifier": "D",
+                    "images": [],
+                    "lPlacement": 4,
+                    "phaseGroup": {
+                      "id": 2824205,
+                      "displayIdentifier": "1"
+                    },
+                    "resetAffectedData": {
+                      "affectedSetCount": 0
+                    },
+                    "round": 3,
+                    "setGamesType": 1,
+                    "slots": [
+                      {
+                        "prereqId": "86988946",
+                        "prereqType": "set",
+                        "prereqPlacement": 2,
+                        "slotIndex": 0,
+                        "seed": {
+                          "id": 34022406,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "Dragões do Midfield"
+                          },
+                          "groupSeedNum": 3,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Mata-Mata"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "1"
+                          },
+                          "placeholderName": "Grupos 1: 2nd",
+                          "placement": 4,
+                          "progressionSeedId": null,
+                          "setRecordWithoutByes": {
+                            "wins": 3,
+                            "losses": 3,
+                            "winPercentage": "50%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 2,
+                          "stats": {
+                            "score": {
+                              "value": 2
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "Dragões do Midfield"
+                          }
+                        }
+                      },
+                      {
+                        "prereqId": "86988945",
+                        "prereqType": "set",
+                        "prereqPlacement": 2,
+                        "slotIndex": 1,
+                        "seed": {
+                          "id": 34022407,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "Cinzenta Fan Club"
+                          },
+                          "groupSeedNum": 4,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Mata-Mata"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "1"
+                          },
+                          "placeholderName": "Grupos 2: 2nd",
+                          "placement": 3,
+                          "progressionSeedId": null,
+                          "setRecordWithoutByes": {
+                            "wins": 4,
+                            "losses": 2,
+                            "winPercentage": "66.67%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 1,
+                          "stats": {
+                            "score": {
+                              "value": 3
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "Cinzenta Fan Club"
+                          }
+                        }
+                      }
+                    ],
+                    "startAt": null,
+                    "totalGames": 5,
+                    "wPlacement": 3,
+                    "winnerId": 19541949
+                  },
+                  {
+                    "id": 86988947,
+                    "completedAt": 1742790106,
+                    "createdAt": 1742790027,
+                    "displayScore": "DST | DISTINTOS SEM TENTAÇÃO 2 - maxi cocido 0",
+                    "event": {
+                      "id": 1310424,
+                      "name": "Estrelas Nascentes SA"
+                    },
+                    "fullRoundText": "Final",
+                    "hasPlaceholder": false,
+                    "identifier": "C",
+                    "images": [],
+                    "lPlacement": 2,
+                    "phaseGroup": {
+                      "id": 2824205,
+                      "displayIdentifier": "1"
+                    },
+                    "resetAffectedData": {
+                      "affectedSetCount": 0
+                    },
+                    "round": 2,
+                    "setGamesType": 1,
+                    "slots": [
+                      {
+                        "prereqId": "86988945",
+                        "prereqType": "set",
+                        "prereqPlacement": 1,
+                        "slotIndex": 0,
+                        "seed": {
+                          "id": 34022404,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "DST | DISTINTOS SEM TENTAÇÃO"
+                          },
+                          "groupSeedNum": 1,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Mata-Mata"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "1"
+                          },
+                          "placeholderName": "Grupos 1: 1st",
+                          "placement": 1,
+                          "progressionSeedId": null,
+                          "setRecordWithoutByes": {
+                            "wins": 6,
+                            "losses": 0,
+                            "winPercentage": "100%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 1,
+                          "stats": {
+                            "score": {
+                              "value": 2
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "DST | DISTINTOS SEM TENTAÇÃO"
+                          }
+                        }
+                      },
+                      {
+                        "prereqId": "86988946",
+                        "prereqType": "set",
+                        "prereqPlacement": 1,
+                        "slotIndex": 1,
+                        "seed": {
+                          "id": 34022405,
+                          "checkedInParticipants": null,
+                          "entrant": {
+                            "name": "maxi cocido"
+                          },
+                          "groupSeedNum": 2,
+                          "isBye": false,
+                          "phase": {
+                            "name": "Mata-Mata"
+                          },
+                          "phaseGroup": {
+                            "displayIdentifier": "1"
+                          },
+                          "placeholderName": "Grupos 2: 1st",
+                          "placement": 2,
+                          "progressionSeedId": null,
+                          "setRecordWithoutByes": {
+                            "wins": 4,
+                            "losses": 2,
+                            "winPercentage": "66.67%"
+                          },
+                          "standings": null
+                        },
+                        "standing": {
+                          "container": {
+                            "__typename": "Set"
+                          },
+                          "isFinal": false,
+                          "metadata": null,
+                          "placement": 2,
+                          "stats": {
+                            "score": {
+                              "value": 0
+                            }
+                          },
+                          "totalPoints": null,
+                          "entrant": {
+                            "name": "maxi cocido"
+                          }
+                        }
+                      }
+                    ],
+                    "startAt": null,
+                    "totalGames": 5,
+                    "wPlacement": 1,
+                    "winnerId": 19540204
+                  }
+                ]
+              }
+            }
+          ],
+          "prizingInfo": {
+            "enablePrizing": false,
+            "markdown": null,
+            "payoutType": null,
+            "payoutTotal": null,
+            "prizing": [
+              {
+                "id": 0,
+                "placement": 1,
+                "percent": 60
+              },
+              {
+                "id": 1,
+                "placement": 2,
+                "percent": 30
+              },
+              {
+                "id": 2,
+                "placement": 3,
+                "percent": 10
+              }
+            ]
+          },
+          "publishing": {
+            "publish": true,
+            "seeding": {
+              "1921259": true,
+              "1921260": true
+            },
+            "bracket": {
+              "1921259": true,
+              "1921260": true
+            },
+            "deck": false
+          },
+          "rulesMarkdown": null,
+          "rulesetId": null,
+          "slug": "tournament/omega-strikers-estrelas-nascentes-sa-3-edi-o/event/estrelas-nascentes-sa"
+        }
+      ],
+      "hasOfflineEvents": false,
+      "hasOnlineEvents": true,
+      "hashtag": null,
+      "images": [
+        {
+          "url": "https://images.start.gg/images/tournament/756267/image-efc1ea661cba8f129f1bef06fc19e962.png"
+        },
+        {
+          "url": "https://images.start.gg/images/tournament/756267/image-a1b11ab84520027e184311dd0bcd6e22.png"
+        }
+      ],
+      "isOnline": true,
+      "isRegistrationOpen": false,
+      "lat": null,
+      "links": {
+        "discord": null
+      },
+      "lng": null,
+      "mapsPlaceId": null,
+      "name": "Omega Strikers - Estrelas Nascentes SA - 3ª Edição",
+      "numAttendees": 35,
+      "owner": {
+        "slug": "user/f4115a49"
+      },
+      "postalCode": null,
+      "primaryContact": "https://discord.gg/2zGMmHBT",
+      "primaryContactType": "discord",
+      "publishing": {
+        "publish": true,
+        "live": false,
+        "fantasy": false,
+        "testmode": false,
+        "hide_spectators": false,
+        "registration": true,
+        "attendees": true,
+        "feature_tab": [],
+        "feedback": [],
+        "pools_ordering": "seeding",
+        "hide_entrant_count": false
+      },
+      "registrationClosesAt": 1741464000,
+      "rules": "",
+      "shortSlug": "estrelasnascentes",
+      "slug": "tournament/omega-strikers-estrelas-nascentes-sa-3-edi-o",
+      "startAt": 1741460400,
+      "state": 3,
+      "timezone": null,
+      "tournamentType": 1,
+      "updatedAt": 1742742478,
+      "url": "/tournament/omega-strikers-estrelas-nascentes-sa-3-edi-o",
+      "venueName": null
+    }
+  },
+  "extensions": {
+    "cacheControl": {
+      "version": 1,
+      "hints": [
+        {
+          "path": [
+            "tournament"
+          ],
+          "maxAge": 300,
+          "scope": "PRIVATE"
+        }
+      ]
+    },
+    "queryComplexity": 304
+  },
+  "actionRecords": []
+}

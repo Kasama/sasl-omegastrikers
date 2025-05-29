@@ -16,6 +16,7 @@ pub struct Match {
     pub team_b_score: i32,
     pub completed: bool,
     pub in_progress: bool,
+    pub featured: bool,
 }
 
 impl DB {
@@ -41,32 +42,37 @@ impl DB {
                 team_b_score: row.team_b_score,
                 completed: row.completed,
                 in_progress: row.in_progress,
+                featured: row.featured,
             }) as anyhow::Result<_>
         })?
         .await
     }
 
     pub async fn get_overlay_matches(&self, overlay_id: Uuid) -> Result<Vec<Match>, anyhow::Error> {
-        let matches_fut = sqlx::query!("SELECT * from matches WHERE overlay_id = $1 ORDER BY created_at ASC", overlay_id)
-            .fetch_all(&self.pool)
-            .await
-            .map(|rows| {
-                rows.into_iter()
-                    .map(|row| async move {
-                        Ok(Match {
-                            id: row.id,
-                            overlay_id: row.overlay_id,
-                            tournament_slug: row.tournament_slug,
-                            team_a: self.get_team(&row.team_a).await?,
-                            team_b: self.get_team(&row.team_b).await?,
-                            team_a_score: row.team_a_score,
-                            team_b_score: row.team_b_score,
-                            completed: row.completed,
-                            in_progress: row.in_progress,
-                        }) as anyhow::Result<_>
-                    })
-                    .collect::<Vec<_>>()
-            })?;
+        let matches_fut = sqlx::query!(
+            "SELECT * from matches WHERE overlay_id = $1 ORDER BY created_at ASC",
+            overlay_id
+        )
+        .fetch_all(&self.pool)
+        .await
+        .map(|rows| {
+            rows.into_iter()
+                .map(|row| async move {
+                    Ok(Match {
+                        id: row.id,
+                        overlay_id: row.overlay_id,
+                        tournament_slug: row.tournament_slug,
+                        team_a: self.get_team(&row.team_a).await?,
+                        team_b: self.get_team(&row.team_b).await?,
+                        team_a_score: row.team_a_score,
+                        team_b_score: row.team_b_score,
+                        completed: row.completed,
+                        in_progress: row.in_progress,
+                        featured: row.featured,
+                    }) as anyhow::Result<_>
+                })
+                .collect::<Vec<_>>()
+        })?;
 
         join_all(matches_fut)
             .await
@@ -85,9 +91,9 @@ impl DB {
         };
         let query = sqlx::query!(
             r#"INSERT INTO matches
-                (id, overlay_id, tournament_slug, team_a, team_b, team_a_score, team_b_score, completed, in_progress)
+                (id, overlay_id, tournament_slug, team_a, team_b, team_a_score, team_b_score, completed, in_progress, featured)
                 VALUES
-                ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                 ON CONFLICT (id) DO
                 UPDATE SET
                     overlay_id = $2,
@@ -98,6 +104,7 @@ impl DB {
                     team_b_score = $7,
                     completed = $8,
                     in_progress = $9,
+                    featured = $10,
                     updated_at = now()
             "#,
             match_.id,
@@ -108,7 +115,8 @@ impl DB {
             match_.team_a_score,
             match_.team_b_score,
             match_.completed,
-            match_.in_progress
+            match_.in_progress,
+            match_.featured,
         );
         query
             .execute(&self.pool)

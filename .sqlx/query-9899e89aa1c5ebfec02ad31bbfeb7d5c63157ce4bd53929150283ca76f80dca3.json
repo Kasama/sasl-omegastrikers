@@ -57,6 +57,11 @@
         "ordinal": 10,
         "name": "updated_at",
         "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 11,
+        "name": "featured",
+        "type_info": "Bool"
       }
     ],
     "parameters": {
@@ -67,6 +72,7 @@
     "nullable": [
       false,
       true,
+      false,
       false,
       false,
       false,

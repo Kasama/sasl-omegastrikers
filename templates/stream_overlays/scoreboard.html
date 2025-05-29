@@ -12,10 +12,10 @@
   }
 
   .team-name {
-    width: 320px;
+    overflow: hidden;
+    min-width: 320px;
     height: 120px;
     display: flex;
-    justify-content: center;
     align-items: center;
     border-radius: 12px;
     color: white;
@@ -37,6 +37,14 @@
     font-size: 22px;
     background: radial-gradient(circle at center, #323232, #2b2b2b);
     border: 1px solid #818181;
+  }
+
+  .pl-30 {
+    padding-left: 30px;
+  }
+
+  .pr-30 {
+    padding-right: 30px;
   }
 
   .right {
@@ -112,11 +120,13 @@
   <div class="flex flex-row">
     <div class="team-container">
       <div class="flex flex-col">
-        <div class="team-name left">
-          <!-- {% if let Some(img) = team_a.image %} -->
-          <!-- <img class="mr-2" style="height: 118px; width: 118px" src="{{img.url}}" alt=""> -->
-          <!-- {% endif %} -->
-          {{ team_a | team_display_name }}
+        <div class="team-name left {% if team_a.image.is_none() %}justify-center{% else %}justify-between{% endif %}">
+          {% if let Some(img) = team_a.image %}
+          <img style="height: 118px; width: 118px" src="{{img.url}}" alt="">
+          {% endif %}
+          <span class="w-full flex-grow text-center mx-4">
+            {{ team_a | team_display_name }}
+          </span>
         </div>
         <div class="team-standings left">{{ team_a_standing }}</div>
       </div>
@@ -124,17 +134,19 @@
     </div>
 
     <div class="logo-circle flex items-center justify-center">
-      <img src="/assets/amongtitans.png" alt="SASL Logo" style="width: 100%">
+      <img src="{{ logo }}" alt="SASL Logo" style="width: 100%">
     </div>
 
     <div class="team-container">
       <div class="score-box red">{{ team_b_score }}</div>
       <div class="flex flex-col">
-        <div class="team-name right">
+        <div class="team-name right {% if team_b.image.is_none() %}justify-center{% else %}justify-between{% endif %}">
+          <span class="w-full flex-grow text-center mx-4">
           {{ team_b | team_display_name }}
-          <!-- {% if let Some(img) = team_b.image %} -->
-          <!-- <img class="ml-2" style="height: 118px; width: 118px" src="{{img.url}}" alt=""> -->
-          <!-- {% endif %} -->
+          </span>
+          {% if let Some(img) = team_b.image %}
+          <img style="height: 118px; width: 118px" src="{{img.url}}" alt="">
+          {% endif %}
         </div>
         <div class="team-standings right">{{ team_b_standing }}</div>
       </div>

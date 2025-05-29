@@ -42,6 +42,11 @@
         "ordinal": 7,
         "name": "championship_phase",
         "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "logo",
+        "type_info": "Varchar"
       }
     ],
     "parameters": {
@@ -57,7 +62,8 @@
       false,
       false,
       true,
-      true
+      true,
+      false
     ]
   },
   "hash": "a7cc4adc75b77a213e5e7997c65ad8ee4b938a14c5fb2396c3bb9f2bf01c1317"

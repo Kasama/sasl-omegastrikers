@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO matches\n                (id, overlay_id, tournament_slug, team_a, team_b, team_a_score, team_b_score, completed, in_progress, featured)\n                VALUES\n                ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)\n                ON CONFLICT (id) DO\n                UPDATE SET\n                    overlay_id = $2,\n                    tournament_slug = $3,\n                    team_a = $4,\n                    team_b = $5,\n                    team_a_score = $6,\n                    team_b_score = $7,\n                    completed = $8,\n                    in_progress = $9,\n                    featured = $10,\n                    updated_at = now()\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Int4",
+        "Int4",
+        "Bool",
+        "Bool",
+        "Bool"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "68d082ea58bbdfdb2b772234703ace5255e4e43c45a4966383aaa1a4aafec43f"
+}

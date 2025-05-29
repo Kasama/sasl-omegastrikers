@@ -12,6 +12,7 @@ pub struct Scoreboard {
     pub team_a_standing: String,
     pub team_b_standing: String,
     pub championship_phase: Option<String>,
+    pub logo: String,
 }
 
 impl DB {
@@ -35,6 +36,7 @@ impl DB {
             team_a_standing: row.team_a_standing.unwrap_or_default(),
             team_b_standing: row.team_b_standing.unwrap_or_default(),
             championship_phase: row.championship_phase,
+            logo: row.logo,
         })
     }
 
@@ -44,9 +46,9 @@ impl DB {
     ) -> Result<Scoreboard, anyhow::Error> {
         let query = sqlx::query!(
             r#"INSERT INTO scoreboard
-                (overlay_id, team_a, team_b, team_a_score, team_b_score, team_a_standing, team_b_standing)
+                (overlay_id, team_a, team_b, team_a_score, team_b_score, team_a_standing, team_b_standing, championship_phase, logo)
                 VALUES
-                ($1, $2, $3, $4, $5, $6, $7)
+                ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                 ON CONFLICT (overlay_id) DO
                 UPDATE SET
                     team_a = $2,
@@ -55,7 +57,8 @@ impl DB {
                     team_b_score = $5,
                     team_a_standing = $6,
                     team_b_standing = $7,
-                    championship_phase = $8
+                    championship_phase = $8,
+                    logo = $9
             "#,
             scoreboard.overlay_id,
             scoreboard.team_a,
@@ -65,6 +68,7 @@ impl DB {
             scoreboard.team_a_standing,
             scoreboard.team_b_standing,
             scoreboard.championship_phase,
+            scoreboard.logo,
         );
         query
             .execute(&self.pool)

@@ -1,49 +1,63 @@
 {%- import "base/macros.html" as macros -%}
 
-{% macro teamselector(selected_team_a="false", score_a="0", selected_team_b="false", score_b="0", in_progress=false, completed=false, match_id="00000000-0000-0000-0000-000000000000") %}
+{% macro teamselector(selected_team_a="false", score_a="0", selected_team_b="false", score_b="0", in_progress=false, completed=false, featured=false, match_id="00000000-0000-0000-0000-000000000000") %}
 <div class="team-selector flex flex-row justify-center items-center w-full">
-  <input type="hidden" value="{{ match_id }}" name="match_id">
-  <select name="team_a"
-    class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1"
-    _="on change add .unsaved to .matches-save">
-    <option value="null" {%if selected_team_a=="false" %} selected {% endif %}>Selecione um time</option>
-    {% for team in teams %}
-    <option value="{{ team.id }}" {% if selected_team_a==team.id %} selected {% endif %}>{{ team | team_full_name }}
-    </option>
-    {% endfor %}
-  </select>
-  <input type="number" name="team_a_score" min="0" max="9" value="{{score_a}}"
-         class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2"
-         _="on change add .unsaved to .matches-save">
-  <span class="mx-2">vs</span>
-  <input type="number" name="team_b_score" min="0" max="9" value="{{score_b}}"
-         class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-blue-500 block p-1 mx-2"
-         _="on change add .unsaved to .matches-save">
-  <select name="team_b"
-    class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-1"
-    _="on change add .unsaved to .matches-save">
-    <option value="null" {%if selected_team_b=="false" %} selected {% endif %}>Selecione um time</option>
-    {% for team in teams %}
-    <option value="{{ team.id }}" {% if selected_team_b==team.id %} selected {% endif %}>{{ team | team_full_name }}
-    </option>
-    {% endfor %}
-  </select>
-  <input _="on click add .unsaved to .matches-save"
-         name="in_progress"
-         value="{{match_id}}"
-         class="rounded-md px-2 py-1 text-white font-bold bg-amber-500 hover:bg-amber-700 transition duration-300 mx-2"
-         {% if in_progress %} checked {% endif %}
-         type="radio">Agora</input>
-  <input _="on click add .unsaved to .matches-save"
-         name="completed"
-         value="{{match_id}}"
-         class="rounded-md px-2 py-1 text-white font-bold bg-amber-500 hover:bg-amber-700 transition duration-300 mx-2"
-         {% if completed %} checked {% endif %}
-         type="checkbox">Finalizado</input>
-  <button _="on click
-    remove closest <div/>
-    " class="rounded-md px-2 py-1 text-white font-bold bg-red-500 hover:bg-red-700 transition duration-300 mx-2"
-    type="button">-</button>
+  <div class="flex flex-row">
+    <div class="flex flex-col justify-center items-center w-full">
+      <div class="flex flex-row">
+        <input type="hidden" value="{{ match_id }}" name="match_id">
+        <select name="team_a"
+          class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1"
+          _="on change add .unsaved to .matches-save">
+          <option value="null" {%if selected_team_a=="false" %} selected {% endif %}>Selecione um time</option>
+          {% for team in teams %}
+          <option value="{{ team.id }}" {% if selected_team_a==team.id %} selected {% endif %}>{{ team | team_full_name }}
+          </option>
+          {% endfor %}
+        </select>
+        <input type="number" name="team_a_score" min="0" max="9" value="{{score_a}}"
+               class="bg-gray-50 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 mx-2"
+               _="on change add .unsaved to .matches-save">
+        <span class="mx-2">vs</span>
+        <input type="number" name="team_b_score" min="0" max="9" value="{{score_b}}"
+               class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-blue-500 block p-1 mx-2"
+               _="on change add .unsaved to .matches-save">
+        <select name="team_b"
+          class="bg-gray-50 border border-pink-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-1"
+          _="on change add .unsaved to .matches-save">
+          <option value="null" {%if selected_team_b=="false" %} selected {% endif %}>Selecione um time</option>
+          {% for team in teams %}
+          <option value="{{ team.id }}" {% if selected_team_b==team.id %} selected {% endif %}>{{ team | team_full_name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="flex flex-row">
+        <input _="on click add .unsaved to .matches-save"
+               name="in_progress"
+               value="{{match_id}}"
+               class="rounded-md px-2 py-1 text-white font-bold bg-amber-500 hover:bg-amber-700 transition duration-300 mx-2"
+               {% if in_progress %} checked {% endif %}
+               type="checkbox">Agora</input>
+        <input _="on click add .unsaved to .matches-save"
+               name="completed"
+               value="{{match_id}}"
+               class="rounded-md px-2 py-1 text-white font-bold bg-amber-500 hover:bg-amber-700 transition duration-300 mx-2"
+               {% if completed %} checked {% endif %}
+               type="checkbox">Finalizado</input>
+        <input _="on click add .unsaved to .matches-save"
+               name="featured"
+               value="{{match_id}}"
+               class="rounded-md px-2 py-1 text-white font-bold bg-amber-500 hover:bg-amber-700 transition duration-300 mx-2"
+               {% if featured %} checked {% endif %}
+               type="checkbox">Série B</input>
+      </div>
+    </div>
+    <button _="on click
+      remove closest <div/>
+      " class="rounded-md px-2 py-1 text-white font-bold bg-red-500 hover:bg-red-700 transition duration-300 mx-2"
+      type="button">-</button>
+  </div>
 </div>
 {% endmacro teamselector %}
 
@@ -63,6 +77,7 @@
       <div class="flex flex-row justify-evenly">
         {% call macros::copy_button("Copiar link do proximo time sozinho", format!("window.location.origin + '/stream_overlay/{}/waiting/next_up_match'", self.overlay_id), "green") %}
         {% call macros::copy_button("Copiar link do timer sozinho", format!("window.location.origin + '/stream_overlay/{}/waiting/standalone_timer'", self.overlay_id), "orange") %}
+        {% call macros::copy_button("Copiar link do proximas partidas sozinho", format!("window.location.origin + '/stream_overlay/{}/partial?name=todays_matches_update'", self.overlay_id), "violet") %}
       </div>
     </div>
   </section>
@@ -83,7 +98,7 @@ function form_children() {
                                                                                      hx-post="/app/tournament/{{tournament_slug}}/overlay/{{ overlay_id }}/waiting/matches">
       <div class="w-full flex flex-col gap-6" id="matches_form">
         {% for match_ in upcoming_matches %}
-        {% call teamselector(match_.team_a.id, match_.team_a_score, match_.team_b.id, match_.team_b_score, match_.in_progress, match_.completed, match_.id) %}
+        {% call teamselector(match_.team_a.id, match_.team_a_score, match_.team_b.id, match_.team_b_score, match_.in_progress, match_.completed, match_.featured, match_.id) %}
         {% endfor %}
       </div>
       {% for match_ in upcoming_matches %}

@@ -20,7 +20,7 @@ use super::error::AppError;
 use super::AppState;
 
 use crate::startgg::oauth::StartggUser;
-use crate::startgg::tournaments::{StartGGTeam, StartGGTournament};
+use crate::startgg::tournaments::{StartGGImage, StartGGTeam, StartGGTournament};
 
 use super::views::filters;
 
@@ -271,11 +271,17 @@ pub async fn get_tournament_teams(
         .fetch_tournament_teams(tournament_slug.to_string())
         .await?;
 
-    let _ = join_all(
-        teams
-            .iter()
-            .map(|team| state.db.upsert_team(tournament_slug, team)),
-    )
+    let _ = join_all(teams.into_iter().map(|mut team| {
+        let s = state.clone();
+        async move {
+            if let Ok(existing_team) = s.db.get_team(&team.id).await {
+                if existing_team.image.is_some() {
+                    team.image = existing_team.image
+                }
+            }
+            s.db.upsert_team(tournament_slug, &team).await
+        }
+    }))
     .await;
 
     let teams = state.db.get_tournament_teams(tournament_slug).await?;
@@ -299,6 +305,54 @@ pub async fn update_team_nickname(
 
     let t = StartGGTeam {
         nickname: Some(form.team_nickname),
+        ..team
+    };
+
+    state.db.upsert_team(&tournament_slug, &t).await?;
+
+    let selected_teams = async {
+        let scoreboard = state.db.get_scoreboard(overlay_id).await.ok()?;
+
+        let team_a = state.db.get_team(&scoreboard.team_a).await.ok()?;
+        let team_b = state.db.get_team(&scoreboard.team_b).await.ok()?;
+
+        Some((team_a, team_b, scoreboard))
+    }
+    .await;
+
+    let teams = get_tournament_teams(state, &auth_session, &tournament_slug).await?;
+
+    Ok(Html(
+        TeamsSetup {
+            tournament_slug,
+            overlay_id,
+            teams,
+            selected_teams,
+        }
+        .render()?,
+    ))
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateTeamImageForm {
+    team: String,
+    team_image: String,
+}
+#[axum::debug_handler]
+pub async fn update_team_image(
+    State(state): State<Arc<AppState>>,
+    auth_session: AuthSession,
+    Path((tournament_slug, overlay_id)): Path<(String, Uuid)>,
+    Form(form): Form<UpdateTeamImageForm>,
+) -> Result<impl IntoResponse, AppError> {
+    let team = state.db.get_team(&form.team).await?;
+
+    let t = StartGGTeam {
+        image: Some(StartGGImage {
+            url: form.team_image,
+            height: 0f64,
+            width: 0f64,
+        }),
         ..team
     };
 
