@@ -1,7 +1,7 @@
 <style>
 .matches-grid {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto auto auto 1fr;
 }
 
 .team {
@@ -13,11 +13,21 @@
   white-space: nowrap;
 }
 
+.text-header {
+  font-size: 22pt;
+  line-height: 22pt;
+  padding-top: 0.455rem;
+  padding-bottom: 0.455rem;
+}
+
 .bg-background {
   background-color: #1D1D1D;
 }
 .bg-table {
   background-color: #323232;
+}
+.bg-subheader {
+  background-color: #878787;
 }
 .bg-header {
   background-color: #4180B0;
@@ -25,26 +35,32 @@
 </style>
 
 {% macro match_line(match_) %}
-<div class="team text-right flex flex-row items-center justify-end {% if match_.completed %} text-gray-400 {% else if match_.in_progress -%} text-white animate-pulse {%- else %} text-white {%- endif %}">
+<div class="my-2 team text-right flex flex-row items-center justify-end {% if match_.completed %} text-gray-400 {% else if match_.in_progress -%} text-white animate-pulse {%- else %} text-white {%- endif %}">
   <span class="text-4xl">{{match_.team_a | team_display_name }}</span>
   {% if let Some(img) = match_.team_a.image %}
   <img class="ml-2 max-h-10 max-w-10" src="{{img.url}}" alt="">
   {% endif %}
 </div>
-<div class="flex items-center justify-center {% if match_.in_progress %}animate-pulse{% endif %}">
-{% if match_.completed || match_.in_progress %}
-  <span class="ml-2 text-4xl {% if match_.completed %}{% if match_.team_a_score < match_.team_b_score %} text-red-400 {% else %} text-green-400 {% endif %}{% endif %}">
-    {{match_.team_a_score}}
-  </span>
-  <span class="text-2xl mx-2">-</span>
-  <span class="mr-2 text-4xl {% if match_.completed %}{% if match_.team_b_score < match_.team_a_score %} text-red-400 {% else %} text-green-400 {% endif %}{% endif %}">
-    {{match_.team_b_score}}
-  </span>
+
+{% if match_.completed || (match_.in_progress && (match_.team_a_score != 0 || match_.team_b_score != 0)) %}
+
+<span class="my-2 ml-4 text-4xl text-center {% if match_.completed %}{% if match_.team_a_score < match_.team_b_score %} text-red-400 {% else %} text-green-400 {% endif %}{% else %} text-gray-400 {% endif %} {% if match_.in_progress %}animate-pulse{% endif %}">
+  {{match_.team_a_score}}
+</span>
+<span class="my-2 text-2xl text-center text-gray-400 mx-2">-</span>
+<span class="my-2 mr-4 text-4xl text-center {% if match_.completed %}{% if match_.team_b_score < match_.team_a_score %} text-red-400 {% else %} text-green-400 {% endif %}{% else %} text-gray-400 {% endif %} {% if match_.in_progress %}animate-pulse{% endif %}">
+  {{match_.team_b_score}}
+</span>
+
 {% else %}
-  <span class="font-bold mx-4 text-2xl vs text-gray-400">vs</span>
+
+<div></div>
+<span class="my-2 font-bold text-4xl vs text-gray-400 text-center {% if match_.in_progress %}animate-pulse{% endif %}">vs</span>
+<div></div>
+
 {% endif %}
-</div>
-<div class="team text-left flex flex-row items-center justify-start {% if match_.completed %} text-gray-400 {% else if match_.in_progress -%} text-white animate-pulse {%- else %} text-white {%- endif %}">
+
+<div class="my-2 mr-4 team text-left flex flex-row items-center justify-start {% if match_.completed %} text-gray-400 {% else if match_.in_progress -%} text-white animate-pulse {%- else %} text-white {%- endif %}">
   {% if let Some(img) = match_.team_b.image %}
   <img class="mr-2 max-h-10 max-w-10" src="{{img.url}}" alt="">
   {% endif %}
@@ -52,32 +68,28 @@
 </div>
 {% endmacro %}
 
-<div class="flex flex-col">
-  <div class="bg-header text-white text-4xl text-center w-full font-bold py-2 px-4 rounded-t-2xl">
-    Partidas de Hoje
+<div class="flex flex-col matches-grid grid bg-table">
+  <div class="bg-header text-white col-span-5 text-header text-center w-full font-bold px-4">
+    Semana 1 - Sábado
   </div>
-  <div class="px-4 bg-table max-h-66 flex-grow text-white">
-    <div class="matches-grid grid grid-cols-3 w-full text-xl font-bold text-white my-4">
-      {% for match_ in todays_matches %}
-      {% if !match_.featured %}
-      {% call match_line(match_) %}
-      {% endif %}
-      {% endfor %}
-    </div>
-  </div>
+  <!-- <div class="matches-grid grid col-span-5 px-4 w-full text-xl font-bold text-white my-4"> -->
+    {% for match_ in todays_matches %}
+    {% if !match_.featured %}
+    {% call match_line(match_) %}
+    {% endif %}
+    {% endfor %}
+  <!-- </div> -->
   {% if todays_matches | has_featured %}
-  <div class="bg-header text-white text-4xl text-center w-full font-bold py-2 px-4">
+  <div class="bg-subheader text-white col-span-5 text-header text-center w-full font-bold px-4">
     SAPG
   </div>
-  <div class="px-4 bg-table max-h-66 flex-grow text-white">
-    <div class="matches-grid grid grid-cols-3 w-full text-xl font-bold text-white my-4">
-      {% for match_ in todays_matches %}
-      {% if match_.featured %}
-      {% call match_line(match_) %}
-      {% endif %}
-      {% endfor %}
-    </div>
-  </div>
+  <!-- <div class="matches-grid grid col-span-5 px-4 w-full text-xl bg-table font-bold text-white my-4"> -->
+    {% for match_ in todays_matches %}
+    {% if match_.featured %}
+    {% call match_line(match_) %}
+    {% endif %}
+    {% endfor %}
+  <!-- </div> -->
   {% endif %}
   <!-- <div class="w-72 h-72 flex flex-col justify-center items-center self-center"> -->
   <!--   <img src="/assets/SASL-with-text.png" alt="SASL Logo" class="w-full h-full object-contain"> -->

@@ -13,7 +13,7 @@
 
   .team-name {
     overflow: hidden;
-    min-width: 320px;
+    min-width: 370px;
     height: 120px;
     display: flex;
     align-items: center;
@@ -122,7 +122,7 @@
       <div class="flex flex-col">
         <div class="team-name left {% if team_a.image.is_none() %}justify-center{% else %}justify-between{% endif %}">
           {% if let Some(img) = team_a.image %}
-          <img style="height: 118px; width: 118px" src="{{img.url}}" alt="">
+          <img style="margin: 5px; height: 113px; width: 113px" src="{{img.url}}" alt="">
           {% endif %}
           <span class="w-full flex-grow text-center mx-4">
             {{ team_a | team_display_name }}
@@ -142,10 +142,10 @@
       <div class="flex flex-col">
         <div class="team-name right {% if team_b.image.is_none() %}justify-center{% else %}justify-between{% endif %}">
           <span class="w-full flex-grow text-center mx-4">
-          {{ team_b | team_display_name }}
+            {{ team_b | team_display_name }}
           </span>
           {% if let Some(img) = team_b.image %}
-          <img style="height: 118px; width: 118px" src="{{img.url}}" alt="">
+          <img style="margin: 5px; height: 113px; width: 113px" src="{{img.url}}" alt="">
           {% endif %}
         </div>
         <div class="team-standings right">{{ team_b_standing }}</div>
